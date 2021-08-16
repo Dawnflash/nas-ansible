@@ -3,7 +3,7 @@
     stat:
       path: /etc/letsencrypt/renewal/nas.dawnflash.cz.conf
     register: le_conf
-  
+
   - name: Configure LE cert for nas.dawnflash.cz
     shell: |
       certbot certonly {{ certbot_flags | default(omit) }} -n \

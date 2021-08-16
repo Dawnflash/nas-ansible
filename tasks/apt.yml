@@ -25,6 +25,8 @@
     - netplan.io
     - certbot
     - python3-certbot-dns-cloudflare
+    - hdparm
+    - jq
 
 - name: Install docker GPG key
   shell: |
