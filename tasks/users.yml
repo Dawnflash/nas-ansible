@@ -1,0 +1,13 @@
+- name: Create unprivileged user
+  user:
+    name: "{{ unprivileged_user_name }}"
+    password: $6$0SUXaqy3hepg/oLj$bP1L3Ej5Nn9HH4r.ikDcg0Z8aKvFC..Cx19PJR0YzeKghTFB6EsnDXt/2ZhzK8XUJC4Vzi4hbZC9Dq6cgrrJy/
+    group: users
+    uid: "{{ unprivileged_user_uid }}"
+    shell: /bin/zsh
+
+- name: Update root password
+  user:
+    name: root
+    password: $6$imGhekdh6mcZh/sq$0aw7zPitMMtqBlhNkCqxIIPTRMmXP05z6kfdM84CKXffeItUCMU.ph7zCnvZWEYnEBP2nP8tPAsBwDGv35LrX0
+    shell: /bin/zsh

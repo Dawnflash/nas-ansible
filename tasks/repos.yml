@@ -1,3 +1,0 @@
-- name: primary repo
-  apt_repository:
-    repo: deb {{ debian_repo_base }} {{ debian_version }} main contrib

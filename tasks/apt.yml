@@ -1,0 +1,44 @@
+- name: Add primary repository
+  apt_repository:
+    repo: deb {{ debian_repo_base }} {{ debian_version }} main contrib
+    filename: main
+
+- name: Install packages
+  apt:
+    update_cache: yes
+    name:
+    - zfsutils-linux
+    - postfix
+    - nginx
+    - zsh
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg
+    - wget
+    - vim
+    - htop
+    - zstd
+    - wireguard
+    - pv
+    - tshark
+    - netplan.io
+
+- name: Install docker GPG key
+  shell: |
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  args:
+    warn: false
+- name: Add docker repository
+  apt_repository:
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ debian_version }} stable
+    filename: docker
+
+- name: Install Docker engine
+  apt:
+    update_cache: yes
+    name: docker-ce
+
+- name: Perform safe upgrade
+  apt:
+    upgrade: safe

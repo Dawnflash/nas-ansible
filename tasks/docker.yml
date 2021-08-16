@@ -1,0 +1,21 @@
+- name: Install Docker compose V2
+  vars:
+    plugin_dir: /root/.docker/cli-plugins
+  shell: |
+    mkdir -p {{ plugin_dir }}
+    curl -SL https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64 -o {{ plugin_dir }}/docker-compose
+    chmod +x {{ plugin_dir }}/docker-compose
+  args:
+    warn: false
+
+- name: Create compose stack directories
+  file:
+    path: "{{ conf_directory }}/docker/{{ item }}"
+    state: directory
+  loop: "{{ docker_stacks }}"
+
+- name: Update compose stacks
+  template:
+    src: docker/docker-compose/{{ item }}.yml
+    dest: "{{ conf_directory }}/docker/{{ item }}/docker-compose.yml" 
+  loop: "{{ docker_stacks }}"

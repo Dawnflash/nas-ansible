@@ -1,0 +1,271 @@
+version: "2.1"
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    restart: unless-stopped
+    environment:
+      - TZ={{ timezone }}
+      - PLEX_UID={{ unprivileged_user_uid }}
+      - PLEX_GID={{ unprivileged_user_gid }}
+        # Home network, Docker bridge network
+      - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
+      - VERSION=docker
+    volumes:
+      - /ssd-data/plex:/config
+      - /ssd-data/plex:/transcode
+      - /Master/Media:/Media
+    network_mode: host
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - /ssd-data/deluge:/config
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 8112:8112
+    networks:
+      media:
+        ipv4_address: 172.20.0.2
+        ipv6_address: fd14::2
+  tautulli:
+    image: tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/tautulli:/config
+      - /ssd-data/plex/Library/Application Support/Plex Media Server/Logs:/logs
+    ports:
+     - 8181:8181
+    networks:
+      media:
+        ipv4_address: 172.20.0.3
+        ipv6_address: fd14::3
+  bazarr:
+    image: linuxserver/bazarr
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/bazarr:/config
+      - /Master/Media/Movies:/movies
+      - /Master/Media/Series:/tv
+    ports:
+      - 6767:6767
+    networks:
+      media:
+        ipv4_address: 172.20.0.4
+        ipv6_address: fd14::4
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/radarr:/config
+      - /Master/Media/Movies:/movies
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 7878:7878
+    networks:
+      media:
+        ipv4_address: 172.20.0.5
+        ipv6_address: fd14::5
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/sonarr:/config
+      - /Master/Media/Series:/tv
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 8989:8989
+    networks:
+      media:
+        ipv4_address: 172.20.0.6
+        ipv6_address: fd14::6
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/lidarr:/config
+      - /Master/Media/Music:/music
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 8686:8686
+    networks:
+      media:
+        ipv4_address: 172.20.0.7
+        ipv6_address: fd14::7
+  readarr:
+    image: linuxserver/readarr:nightly
+    container_name: readarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/readarr:/config
+      - /ssd-data/downloads:/downloads
+      - /Master/Media/Books:/books
+    ports:
+      - 8787:8787
+    networks:
+      media:
+        ipv4_address: 172.20.0.8
+        ipv6_address: fd14::8
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    environment:
+      TZ: {{ timezone }}
+      VIRTUAL_HOST: {{ hostname }}
+      ServerIP: {{ ipv4_address }}
+      ServerIPv6: {{ ipv6_address }}
+      DNS1: 1.1.1.1
+      DNS2: 8.8.8.8
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    # Volumes store your data between container upgrades
+    volumes:
+      - /ssd-data/dns/pihole:/etc/pihole
+      - /ssd-data/dns/dnsmasq:/etc/dnsmasq.d
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 8080:80/tcp
+      - 8081:443/tcp
+    networks:
+      media:
+        ipv4_address: 172.20.0.9
+        ipv6_address: fd14::9
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/nzbget:/config
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 6789:6789
+    networks:
+      media:
+        ipv4_address: 172.20.0.11
+        ipv6_address: fd14::b
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/ombi:/config
+    ports:
+      - 3579:3579
+    networks:
+      media:
+        ipv4_address: 172.20.0.12
+        ipv6_address: fd14::c
+  facette:
+    image: facette/facette
+    container_name: facette
+    restart: unless-stopped
+    user: "{{ unprivileged_user_uid }}:{{ unprivileged_user_gid }}"
+    volumes:
+      - /ssd-data/facette/etc:/etc/facette
+      - /ssd-data/facette/var:/var/lib/facette
+      - /ssd-data/facette/cache:/var/cache/facette
+      - /var/lib/rrdcached:/var/lib/rrdcached
+    ports:
+      - 12003:12003
+    networks:
+      media:
+        ipv4_address: 172.20.0.13
+        ipv6_address: fd14::d
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    user: "{{ unprivileged_user_uid }}:{{ unprivileged_user_gid }}"
+    environment:
+      - TZ={{ timezone }}
+      - IP_HEADER=X-Real-IP
+      - WEBSOCKET_ENABLED=true
+      - WEBSOCKET_PORT=12005
+      - LOG_FILE=/data/bitwarden.log
+      - LOG_LEVEL=warn
+      - SIGNUPS_ALLOWED=true
+      - ADMIN_TOKEN={{ bitwarden_admin_token }}
+      - DOMAIN=https://bitwarden.{{ hostname }}
+      - ROCKET_PORT=12004
+    volumes:
+      - /ssd-data/bitwarden:/data
+    ports:
+      - 12004:12004
+      - 12005:12005
+    networks:
+      media:
+        ipv4_address: 172.20.0.14
+        ipv6_address: fd14::e
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_uid }}
+      - PGID={{ unprivileged_user_gid }}
+      - TZ={{ timezone }}
+    volumes:
+      - /ssd-data/prowlarr:/config
+    ports:
+      - 9696:9696
+    networks:
+      media:
+        ipv4_address: 172.20.0.15
+        ipv6_address: fd14::f
+
+networks:
+  media:
+    driver: bridge
+    enable_ipv6 : true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+        - subnet: fd14::/112
+          gateway: fd14::1

@@ -1,0 +1,16 @@
+- name: Set hostname to {{ hostname }}
+  hostname:
+    name: "{{ hostname }}"
+
+- name: Set timezone to {{ timezone }}
+  timezone:
+    name: "{{ timezone }}"
+
+- block:
+  - name: Set NTP servers
+    template:
+      src: chrony_sources.j2
+      dest: /etc/chrony/sources.d/nas.sources
+
+  - name: Reload chrony sources
+    command: chronyc reload sources
