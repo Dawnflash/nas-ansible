@@ -5,6 +5,10 @@ timezone: Europe/Prague
 ntp_servers:
   - tik.cesnet.cz
   - tak.cesnet.cz
+  - time.ufe.cz
+  - lxn.ujf.cas.cz
+  - ntp.nic.cz
+  - ntpm.fit.vutbr.cz
 
 ipv4_address: 192.168.0.115
 ipv6_address: 2a02:8308:305:7f00::abcd
