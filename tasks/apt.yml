@@ -23,6 +23,8 @@
     - pv
     - tshark
     - netplan.io
+    - certbot
+    - python3-certbot-dns-cloudflare
 
 - name: Install docker GPG key
   shell: |

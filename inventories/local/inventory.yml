@@ -3,3 +3,5 @@ all:
     ansible-nas-test:
       ansible_host: localhost
       ansible_connection: local
+  vars:
+    certbot_flags: --staging

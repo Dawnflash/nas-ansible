@@ -7,7 +7,9 @@
     version: 1.2.0
 
   tasks:
-    - import_tasks: tasks/host.yml
-    - import_tasks: tasks/apt.yml
-    - import_tasks: tasks/users.yml
+    #- import_tasks: tasks/host.yml
+    #- import_tasks: tasks/apt.yml
+    #- import_tasks: tasks/users.yml
+    - import_tasks: tasks/scripts.yml
     - import_tasks: tasks/docker.yml
+    - import_tasks: tasks/web.yml

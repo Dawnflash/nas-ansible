@@ -1,0 +1,14 @@
+- block:
+  - name: Check for LE conf for nas.dawnflash.cz
+    stat:
+      path: /etc/letsencrypt/renewal/nas.dawnflash.cz.conf
+    register: le_conf
+  
+  - name: Configure LE cert for nas.dawnflash.cz
+    shell: |
+      certbot certonly {{ certbot_flags | default(omit) }} -n \
+      -d {{ hostname }} -d "*.{{ hostname }}" \
+      --agree-tos --email {{ emails.dawn }} \
+      --post-hook /root/bin/cert_postrenew.sh \
+      --dns-cloudflare --dns-cloudflare-credentials {{ conf_directory }}/private/cloudflare_dawnflash.cz.ini
+    when: not le_conf.stat.exists
