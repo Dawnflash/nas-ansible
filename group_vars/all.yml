@@ -1,0 +1,2 @@
+debian_version: bullseye
+debian_repo_base: http://ftp.sh.cvut.cz/debian/

@@ -1,0 +1,5 @@
+all:
+  hosts:
+    ansible-nas-test:
+      ansible_host: localhost
+      ansible_connection: local
