@@ -1,10 +1,10 @@
 - block:
-  - name: Check for LE conf for nas.dawnflash.cz
+  - name: Check for LE conf for {{ hostname }}
     stat:
-      path: /etc/letsencrypt/renewal/nas.dawnflash.cz.conf
+      path: /etc/letsencrypt/renewal/{{ hostname }}.conf
     register: le_conf
 
-  - name: Configure LE cert for nas.dawnflash.cz
+  - name: Configure LE cert for {{ hostname }}
     shell: |
       certbot certonly {{ certbot_flags | default(omit) }} -n \
       -d {{ hostname }} -d "*.{{ hostname }}" \
