@@ -30,7 +30,7 @@
 
 - name: Add unprivileged user to Docker group
   user:
-    name: "{{ unprivileged_user_name }}"
+    name: "{{ unprivileged_user.name }}"
     groups:
       - docker
     append: yes

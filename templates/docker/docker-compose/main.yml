@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     environment:
       - TZ={{ timezone }}
-      - PLEX_UID={{ unprivileged_user_uid }}
-      - PLEX_GID={{ unprivileged_user_gid }}
+      - PLEX_UID={{ unprivileged_user.uid }}
+      - PLEX_GID={{ unprivileged_user.gid }}
         # Home network, Docker bridge network
       - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
       - VERSION=docker
@@ -21,8 +21,8 @@ services:
     container_name: deluge
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
       - DELUGE_LOGLEVEL=error #optional
     volumes:
@@ -39,8 +39,8 @@ services:
     container_name: tautulli
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/tautulli:/config
@@ -56,8 +56,8 @@ services:
     container_name: bazarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/bazarr:/config
@@ -74,8 +74,8 @@ services:
     container_name: radarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/radarr:/config
@@ -92,8 +92,8 @@ services:
     container_name: sonarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/sonarr:/config
@@ -110,8 +110,8 @@ services:
     container_name: lidarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/lidarr:/config
@@ -128,8 +128,8 @@ services:
     container_name: readarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/readarr:/config
@@ -172,8 +172,8 @@ services:
     container_name: nzbget
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/nzbget:/config
@@ -189,8 +189,8 @@ services:
     container_name: ombi
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/ombi:/config
@@ -204,7 +204,7 @@ services:
     image: facette/facette
     container_name: facette
     restart: unless-stopped
-    user: "{{ unprivileged_user_uid }}:{{ unprivileged_user_gid }}"
+    user: "{{ unprivileged_user.uid }}:{{ unprivileged_user.gid }}"
     volumes:
       - /ssd-data/facette/etc:/etc/facette
       - /ssd-data/facette/var:/var/lib/facette
@@ -220,7 +220,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
-    user: "{{ unprivileged_user_uid }}:{{ unprivileged_user_gid }}"
+    user: "{{ unprivileged_user.uid }}:{{ unprivileged_user.gid }}"
     environment:
       - TZ={{ timezone }}
       - IP_HEADER=X-Real-IP
@@ -246,8 +246,8 @@ services:
     container_name: prowlarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user_uid }}
-      - PGID={{ unprivileged_user_gid }}
+      - PUID={{ unprivileged_user.uid }}
+      - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
       - /ssd-data/prowlarr:/config

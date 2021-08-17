@@ -16,9 +16,10 @@ ipv6_cidr: 2a02:8308:305:7f00:1::/80
 
 conf_directory: /ssd-data
 
-unprivileged_user_name: snekurr
-unprivileged_user_uid: 2000
-unprivileged_user_gid: 100
+unprivileged_user:
+  name: snekurr
+  uid: 2000
+  gid: 100
 
 docker_stacks:
   - main

@@ -1,9 +1,9 @@
 - name: Create unprivileged user
   user:
-    name: "{{ unprivileged_user_name }}"
+    name: "{{ unprivileged_user.name }}"
     password: $6$0SUXaqy3hepg/oLj$bP1L3Ej5Nn9HH4r.ikDcg0Z8aKvFC..Cx19PJR0YzeKghTFB6EsnDXt/2ZhzK8XUJC4Vzi4hbZC9Dq6cgrrJy/
     group: users
-    uid: "{{ unprivileged_user_uid }}"
+    uid: "{{ unprivileged_user.uid }}"
     shell: /bin/zsh
 
 - name: Update root password
