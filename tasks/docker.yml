@@ -1,3 +1,9 @@
+- name: Start Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
 - block:
   - name: Check for Docker compose V2
     stat:
@@ -20,13 +26,13 @@
   file:
     path: "{{ conf_directory }}/docker/{{ item }}"
     state: directory
-  loop: "{{ docker_stacks }}"
+  loop: "{{ docker.stacks }}"
 
 - name: Update compose stacks
   template:
     src: docker/docker-compose/{{ item }}.yml
     dest: "{{ conf_directory }}/docker/{{ item }}/docker-compose.yml" 
-  loop: "{{ docker_stacks }}"
+  loop: "{{ docker.stacks }}"
 
 - name: Add unprivileged user to Docker group
   user:

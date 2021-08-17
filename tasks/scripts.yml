@@ -17,7 +17,7 @@
     dest: /root
   with_fileglob: "files/zsh/.*"
 
-- name: Create root bin folder
+- name: Create root bin directory
   file:
     path: /root/bin
     state: directory
@@ -29,7 +29,7 @@
     mode: 0755
   with_fileglob: "templates/scripts/*"
 
-- name: Create private folder
+- name: Create private directory
   file:
     path: "{{ conf_directory }}/private"
     state: directory

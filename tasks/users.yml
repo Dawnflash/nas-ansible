@@ -1,13 +1,13 @@
 - name: Create unprivileged user
   user:
     name: "{{ unprivileged_user.name }}"
-    password: $6$0SUXaqy3hepg/oLj$bP1L3Ej5Nn9HH4r.ikDcg0Z8aKvFC..Cx19PJR0YzeKghTFB6EsnDXt/2ZhzK8XUJC4Vzi4hbZC9Dq6cgrrJy/
+    password: "{{ unprivileged_user.password | string | password_hash('sha512', unprivileged_user.salt) }}"
     group: users
     uid: "{{ unprivileged_user.uid }}"
     shell: /bin/zsh
 
-- name: Update root password
+- name: Configure root user
   user:
     name: root
-    password: $6$imGhekdh6mcZh/sq$0aw7zPitMMtqBlhNkCqxIIPTRMmXP05z6kfdM84CKXffeItUCMU.ph7zCnvZWEYnEBP2nP8tPAsBwDGv35LrX0
+    password: "{{ root.password | string | password_hash('sha512', root.salt) }}"
     shell: /bin/zsh

@@ -1,0 +1,29 @@
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+
+  location /status {
+    stub_status;
+    allow 127.0.0.1;
+    allow ::1;
+    deny all;
+  }
+
+  location /health {
+    add_header "X-Cat" "🐈";
+    return 204;
+  }
+
+  location / {
+    return 301 https://{{ hostname }}$request_uri;
+  }
+}
+
+server {
+  server_name {{ hostname }};
+  listen [::]:443 ssl http2;
+  ssl_certificate_key {{ nginx.ssl_key }};
+  ssl_certificate {{ nginx.ssl_cert }};
+
+  root {{ nginx.paths.html }};
+}

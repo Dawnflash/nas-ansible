@@ -1,6 +1,6 @@
 #!/bin/bash
 
-{% for stack in docker_stacks %}
+{% for stack in docker.stacks %}
 cd '{{ conf_directory }}/docker/{{ stack }}'
 echo Upgrading stack {{ stack }}
 

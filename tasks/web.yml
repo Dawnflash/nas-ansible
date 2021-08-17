@@ -12,3 +12,51 @@
       --post-hook /root/bin/cert_postrenew.sh \
       --dns-cloudflare --dns-cloudflare-credentials {{ conf_directory }}/private/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
+
+- name: Create web-related directories
+  file:
+    path: "{{ item.value }}"
+    state: directory
+  loop: "{{ nginx.paths | dict2items }}"
+
+- name: Sync landing HTML files
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx.paths.html }}"
+  with_fileglob: "templates/nginx/html/*"
+
+- block:
+  - name: Install static nginx configuration
+    template:
+      src: "{{ item }}"
+      dest: "{{ avail_dir }}"
+    with_fileglob: "templates/nginx/conf/static/*"
+
+  - name: Enable static nginx configuration
+    file:
+      src: "{{ avail_dir }}/{{ item | basename }}"
+      dest: "{{ enabl_dir }}/{{ item | basename }}"
+      state: link
+    with_fileglob: "templates/nginx/conf/static/*"
+  
+  - name: Install proxy nginx configuration
+    template:
+      src: nginx/conf/template.conf
+      dest: "{{ avail_dir }}/{{ item.key }}"
+    loop: "{{ nginx.proxy | dict2items }}"
+  
+  - name: Enable proxy nginx configuration
+    file:
+      src: "{{ avail_dir }}/{{ item.key }}"
+      dest: "{{ enabl_dir }}/{{ item.key }}"
+      state: link
+    loop: "{{ nginx.proxy | dict2items }}"
+
+  vars:
+    avail_dir: /etc/nginx/sites-available
+    enabl_dir: /etc/nginx/sites-enabled
+
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded

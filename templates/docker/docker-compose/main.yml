@@ -12,8 +12,8 @@ services:
       - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
       - VERSION=docker
     volumes:
-      - /ssd-data/plex:/config
-      - /ssd-data/plex:/transcode
+      - "{{ conf_directory }}/plex:/config"
+      - "{{ conf_directory }}/plex:/transcode"
       - /Master/Media:/Media
     network_mode: host
   deluge:
@@ -26,8 +26,8 @@ services:
       - TZ={{ timezone }}
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - /ssd-data/deluge:/config
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/deluge:/config"
+      - "{{ conf_directory }}/downloads:/downloads"
     ports:
       - 8112:8112
     networks:
@@ -43,8 +43,8 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/tautulli:/config
-      - /ssd-data/plex/Library/Application Support/Plex Media Server/Logs:/logs
+      - "{{ conf_directory }}/tautulli:/config"
+      - "{{ conf_directory }}/plex/Library/Application Support/Plex Media Server/Logs:/logs"
     ports:
      - 8181:8181
     networks:
@@ -60,7 +60,7 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/bazarr:/config
+      - "{{ conf_directory }}/bazarr:/config"
       - /Master/Media/Movies:/movies
       - /Master/Media/Series:/tv
     ports:
@@ -78,9 +78,9 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/radarr:/config
+      - "{{ conf_directory }}/radarr:/config"
       - /Master/Media/Movies:/movies
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/downloads:/downloads"
     ports:
       - 7878:7878
     networks:
@@ -96,9 +96,9 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/sonarr:/config
+      - "{{ conf_directory }}/sonarr:/config"
       - /Master/Media/Series:/tv
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/downloads:/downloads"
     ports:
       - 8989:8989
     networks:
@@ -114,9 +114,9 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/lidarr:/config
+      - "{{ conf_directory }}/lidarr:/config"
       - /Master/Media/Music:/music
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/downloads:/downloads"
     ports:
       - 8686:8686
     networks:
@@ -132,8 +132,8 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/readarr:/config
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/readarr:/config"
+      - "{{ conf_directory }}/downloads:/downloads"
       - /Master/Media/Books:/books
     ports:
       - 8787:8787
@@ -147,16 +147,16 @@ services:
     restart: unless-stopped
     environment:
       TZ: {{ timezone }}
-      VIRTUAL_HOST: {{ hostname }}
-      ServerIP: {{ ipv4_address }}
-      ServerIPv6: {{ ipv6_address }}
+      VIRTUAL_HOST: pihole.{{ hostname }}
+      ServerIP: {{ network.ipv4 }}
+      ServerIPv6: {{ network.ipv6 }}
       DNS1: 1.1.1.1
       DNS2: 8.8.8.8
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     volumes:
-      - /ssd-data/dns/pihole:/etc/pihole
-      - /ssd-data/dns/dnsmasq:/etc/dnsmasq.d
+      - "{{ conf_directory }}/dns/pihole:/etc/pihole"
+      - "{{ conf_directory }}/dns/dnsmasq:/etc/dnsmasq.d"
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -176,14 +176,14 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/nzbget:/config
-      - /ssd-data/downloads:/downloads
+      - "{{ conf_directory }}/nzbget:/config"
+      - "{{ conf_directory }}/downloads:/downloads"
     ports:
       - 6789:6789
     networks:
       media:
-        ipv4_address: 172.20.0.11
-        ipv6_address: fd14::b
+        ipv4_address: 172.20.0.10
+        ipv6_address: fd14::a
   ombi:
     image: linuxserver/ombi
     container_name: ombi
@@ -193,29 +193,13 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/ombi:/config
+      - "{{ conf_directory }}/ombi:/config"
     ports:
       - 3579:3579
     networks:
       media:
-        ipv4_address: 172.20.0.12
-        ipv6_address: fd14::c
-  facette:
-    image: facette/facette
-    container_name: facette
-    restart: unless-stopped
-    user: "{{ unprivileged_user.uid }}:{{ unprivileged_user.gid }}"
-    volumes:
-      - /ssd-data/facette/etc:/etc/facette
-      - /ssd-data/facette/var:/var/lib/facette
-      - /ssd-data/facette/cache:/var/cache/facette
-      - /var/lib/rrdcached:/var/lib/rrdcached
-    ports:
-      - 12003:12003
-    networks:
-      media:
-        ipv4_address: 172.20.0.13
-        ipv6_address: fd14::d
+        ipv4_address: 172.20.0.11
+        ipv6_address: fd14::b
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -229,18 +213,18 @@ services:
       - LOG_FILE=/data/bitwarden.log
       - LOG_LEVEL=warn
       - SIGNUPS_ALLOWED=true
-      - ADMIN_TOKEN={{ bitwarden_admin_token }}
+      - ADMIN_TOKEN={{ bitwarden.admin_token }}
       - DOMAIN=https://bitwarden.{{ hostname }}
       - ROCKET_PORT=12004
     volumes:
-      - /ssd-data/bitwarden:/data
+      - "{{ conf_directory }}/bitwarden:/data"
     ports:
       - 12004:12004
       - 12005:12005
     networks:
       media:
-        ipv4_address: 172.20.0.14
-        ipv6_address: fd14::e
+        ipv4_address: 172.20.0.12
+        ipv6_address: fd14::c
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
@@ -250,13 +234,13 @@ services:
       - PGID={{ unprivileged_user.gid }}
       - TZ={{ timezone }}
     volumes:
-      - /ssd-data/prowlarr:/config
+      - "{{ conf_directory }}/prowlarr:/config"
     ports:
       - 9696:9696
     networks:
       media:
-        ipv4_address: 172.20.0.15
-        ipv6_address: fd14::f
+        ipv4_address: 172.20.0.13
+        ipv6_address: fd14::d
 
 networks:
   media:

@@ -1,5 +1,5 @@
 {
     "data-root": "/var/lib/docker",
     "ipv6": true,
-    "fixed-cidr-v6": "{{ ipv6_cidr }}"
+    "fixed-cidr-v6": "{{ docker.ipv6_cidr }}"
 }

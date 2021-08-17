@@ -11,6 +11,8 @@
     template:
       src: chrony_sources.j2
       dest: /etc/chrony/sources.d/nas.sources
+    register: chrony_src
 
   - name: Reload chrony sources
     command: chronyc reload sources
+    when: chrony_src.changed

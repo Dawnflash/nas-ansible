@@ -1,0 +1,39 @@
+- name: Start InfluxDB
+  systemd:
+    name: influxdb
+    enabled: yes
+    state: started
+
+- name: Start Telegraf
+  systemd:
+    name: telegraf
+    enabled: yes
+    state: started
+
+- block:
+  - name: Check for root InfluxDB configuration
+    stat:
+      path: /root/.influxdbv2/configs
+    register: influx_token
+
+  - name: Setup InfluxDB
+    shell: |
+      influx setup -f -u admin -p {{ root.password }} -o {{ influx_setup.primary_org }} \
+      -b {{ influx_setup.primary_bucket.name }} -r {{ influx_setup.primary_bucket.retention }}
+      influx user create -n telegraf
+      BUCKET=$(influx bucket list -n {{ influx_setup.primary_bucket.name }} --json | jq -r '.[0].id')
+      TOKEN=$(influx auth create -u telegraf --read-bucket $BUCKET --write-bucket $BUCKET --json | jq -r '.token')
+      echo "INFLUX_TOKEN=$TOKEN" >/etc/default/telegraf
+    when: not influx_token.stat.exists
+
+  - name: Configure Telegraf
+    template:
+      src: telegraf/telegraf.conf
+      dest: /etc/telegraf
+    register: telegraf_conf
+
+  - name: Restart Telegraf
+    systemd:
+      name: telegraf
+      state: restarted
+    when: not influx_token.stat.exists or telegraf_conf.changed

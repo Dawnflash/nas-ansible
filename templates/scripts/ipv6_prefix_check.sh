@@ -1,12 +1,21 @@
 #!/bin/bash
 
-CF_TOKEN={{ cloudflare_api_token }}
-CF_DOMAIN=dawnflash.cz
+CF_ZONE={{ cloudflare.zone }}
+TG_CHAT={{ telegram.chat }}
+TG_TOKEN={{ telegram.token }}
+
+TG_BASE="https://api.telegram.org/bot${TG_TOKEN}"
 DKR_CONFIG=/etc/docker/daemon.json
-INTF=enp7s0
+INTF={{ network.uplink }}
 SFX="::abcd"
-PLAN=/etc/netplan/20-openmediavault-$INTF.yaml
+PLAN=/etc/netplan/{{ network.netplan }}
 SEL='\s[0-9a-f]*:[0-9a-f]*:[0-9a-f]*:[0-9a-f]*'
+
+tg_notify () {
+  echo Sending TG notification
+  MSG="[NAS Networking] IPv6 changed: $OLD_ADDR -> $NEW_ADDR\nPlease update Ansible configuration."
+  curl -s "$TG_BASE/sendMessage" -d "chat_id=$TG_CHAT" -d "text=$MSG"
+}
 
 dkr_update () {
   echo Updating Docker config
@@ -16,7 +25,7 @@ dkr_update () {
 
 cf_update() {
   echo Updating Cloudflare AAAA record
-  ZID=$(cf_request GET "zones?name=$CF_DOMAIN" | jq -r .result[0].id)
+  ZID=$(cf_request GET "zones?name=$CF_ZONE" | jq -r .result[0].id)
   RIDS=$(cf_request GET "zones/$ZID/dns_records?type=AAAA&content=$OLD_ADDR" | jq -r .result[].id)
   for RID in $RIDS; do
     cf_request PATCH "zones/$ZID/dns_records/$RID" "{\"content\":\"$NEW_ADDR\"}" | jq -r '.result.name + ": " + (.success | tostring)'
@@ -52,6 +61,7 @@ while true; do
   sleep 5
   dkr_update
   cf_update
+  tg_notify
 
   sleep 60
 done

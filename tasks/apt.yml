@@ -28,26 +28,39 @@
     - hdparm
     - jq
     - hddtemp
+    - lm-sensors
+    - python3-yaml
 
 - block:
-  - name: Install docker GPG key
+  - name: Install armored APT GPG keys
     shell: |
-      curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o {{ docker_keyring }}
+      curl -fsSL {{ item.value.gpg }} | gpg --yes --dearmor -o {{ trusted_gpg_d }}/{{ item.key }}.gpg
+    loop: "{{ apt_gpg_keys.armor | dict2items }}"
     args:
       warn: false
 
-  - name: Add docker repository
-    apt_repository:
-      repo: deb [arch=amd64 signed-by={{ docker_keyring }}] https://download.docker.com/linux/debian {{ debian_version }} stable
-      filename: docker
+  - name: Install binary APT GPG keys
+    get_url:
+      url: "{{ item.value.gpg }}"
+      dest: "{{ trusted_gpg_d }}/{{ item.key }}.gpg"
+    loop: "{{ apt_gpg_keys.binary | dict2items }}"
 
-  - name: Install Docker engine
+  - name: Add signed repositories
+    apt_repository:
+      repo: deb [arch=amd64 signed-by={{ trusted_gpg_d }}/{{ item.key }}.gpg] {{ item.value.repo }}
+      filename: "{{ item.key }}"
+    loop: "{{ apt_gpg_keys.armor | combine(apt_gpg_keys.binary) | dict2items }}"
+
+  - name: Install additional packages
     apt:
       update_cache: yes
-      name: docker-ce
+      name:
+        - docker-ce
+        - influxdb2
+        - telegraf
 
   vars:
-    docker-keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+    trusted_gpg_d: /etc/apt/trusted.gpg.d
 
 - name: Perform safe upgrade
   apt:

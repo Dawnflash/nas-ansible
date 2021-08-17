@@ -13,3 +13,4 @@
     - import_tasks: tasks/scripts.yml
     - import_tasks: tasks/docker.yml
     - import_tasks: tasks/web.yml
+    - import_tasks: tasks/stats.yml

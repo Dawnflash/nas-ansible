@@ -7,6 +7,7 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+source <(influx completion zsh)
 
 alias grep="grep --color"
 alias ip="ip -c"
