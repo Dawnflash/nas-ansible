@@ -42,8 +42,8 @@
       dest: /etc/docker
     register: daemon_json
 
-  - name: Restart Docker
-    service:
+  - name: Reload Docker
+    systemd:
       name: docker
-      state: restarted
+      state: reloaded
     when: daemon_json.changed
