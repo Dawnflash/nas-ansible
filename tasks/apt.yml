@@ -27,21 +27,27 @@
     - python3-certbot-dns-cloudflare
     - hdparm
     - jq
+    - hddtemp
 
-- name: Install docker GPG key
-  shell: |
-    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-  args:
-    warn: false
-- name: Add docker repository
-  apt_repository:
-    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ debian_version }} stable
-    filename: docker
+- block:
+  - name: Install docker GPG key
+    shell: |
+      curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --yes --dearmor -o {{ docker_keyring }}
+    args:
+      warn: false
 
-- name: Install Docker engine
-  apt:
-    update_cache: yes
-    name: docker-ce
+  - name: Add docker repository
+    apt_repository:
+      repo: deb [arch=amd64 signed-by={{ docker_keyring }}] https://download.docker.com/linux/debian {{ debian_version }} stable
+      filename: docker
+
+  - name: Install Docker engine
+    apt:
+      update_cache: yes
+      name: docker-ce
+
+  vars:
+    docker-keyring: /usr/share/keyrings/docker-archive-keyring.gpg
 
 - name: Perform safe upgrade
   apt:
