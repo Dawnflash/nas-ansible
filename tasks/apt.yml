@@ -68,6 +68,11 @@
       - influxdb2
       - telegraf
 
+- name: Run DKMS autoinstall
+  command: dkms autoinstall
+  register: dkms_autoinstall_reg
+  changed_when: dkms_autoinstall_reg.stdout | length > 0
+
 - name: Perform safe upgrade
   apt:
     upgrade: safe
