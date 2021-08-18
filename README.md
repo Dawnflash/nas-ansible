@@ -2,10 +2,9 @@
 
 Based on Debian.
 
-Uses `ansible-galaxy` resources, run `ansible-galaxy -r requirements.yml` to pull them before provisioning anything.
+Uses `ansible-galaxy` resources, run `make deps` to pull them before provisioning anything.
 
 ## Testing
 
-Use Vagrant to test functionality.
-
-Set `VAGRANT_EXPERIMENTAL=disk` when spinning up the VM to get an extra disk to experiment with ZFS/shares upon.
+Use the provided Makefile if you want.
+`make` gets you started from zero, `make test` provisions a running VM.
