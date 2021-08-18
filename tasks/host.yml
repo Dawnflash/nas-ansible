@@ -40,7 +40,7 @@
       src: netplan/{{ network.netplan }}
       dest: /etc/netplan
     register: netplan_conf
-  
+
   - name: Enable networkd
     systemd:
       name: systemd-networkd

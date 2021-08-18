@@ -38,13 +38,13 @@
       dest: "{{ enabl_dir }}/{{ item | basename }}"
       state: link
     with_fileglob: "templates/nginx/conf/static/*"
-  
+
   - name: Install proxy nginx configuration
     template:
       src: nginx/conf/template.conf
       dest: "{{ avail_dir }}/{{ item.key }}"
     loop: "{{ nginx.proxy | dict2items }}"
-  
+
   - name: Enable proxy nginx configuration
     file:
       src: "{{ avail_dir }}/{{ item.key }}"

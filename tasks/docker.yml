@@ -31,7 +31,7 @@
 - name: Update compose stacks
   template:
     src: docker/docker-compose/{{ item }}.yml
-    dest: "{{ conf_directory }}/docker/{{ item }}/docker-compose.yml" 
+    dest: "{{ conf_directory }}/docker/{{ item }}/docker-compose.yml"
   loop: "{{ docker.stacks }}"
 
 - name: Add unprivileged user to Docker group
