@@ -1,0 +1,6 @@
+Protocol 2
+UsePAM yes
+PermitRootLogin without-password
+PasswordAuthentication no
+StrictModes yes
+UseDNS no

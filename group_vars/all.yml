@@ -2,6 +2,7 @@ debian_version: bullseye
 debian_repo_base: http://ftp.sh.cvut.cz/debian/
 hostname: nas.dawnflash.cz
 timezone: Europe/Prague
+locale: C.UTF-8
 ntp_servers:
   - tik.cesnet.cz
   - tak.cesnet.cz

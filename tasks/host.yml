@@ -6,6 +6,12 @@
   timezone:
     name: "{{ timezone }}"
 
+- name: Set default configuration
+  template:
+    src: "{{ item }}"
+    dest: /etc/default
+  with_fileglob: "templates/default/*"
+
 - block:
   - name: Set NTP servers
     template:
