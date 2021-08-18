@@ -13,7 +13,6 @@ Vagrant.configure(2) do |config|
     config.vm.provision "ansible" do |ansible|
       ansible.inventory_path = "inventories/local/inventory.yml"
       ansible.playbook = "nas.yml"
-      ansible.become = true
     end
   end
 end
