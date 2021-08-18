@@ -1,4 +1,4 @@
-all: deps up test
+all: deps test
 
 up:
 	VAGRANT_EXPERIMENTAL=disks vagrant up
@@ -6,7 +6,7 @@ up:
 down:
 	vagrant halt
 
-test:
+test: up
 	vagrant provision
 
 deps:
