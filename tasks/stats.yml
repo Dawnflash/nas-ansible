@@ -26,11 +26,19 @@
       dest: /etc/telegraf
     register: telegraf_conf
 
+  - name: Add telegraf user to docker group
+    user:
+      name: telegraf
+      groups:
+        - docker
+      append: yes
+    register: telegraf_user_conf
+
   - name: Restart Telegraf
     systemd:
       name: telegraf
       state: restarted
-    when: not influx_token.stat.exists or telegraf_conf.changed
+    when: not influx_token.stat.exists or telegraf_conf.changed or telegraf_user_conf.changed
 
 - name: Start Telegraf
   systemd:

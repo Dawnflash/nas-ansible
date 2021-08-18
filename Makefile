@@ -1,13 +1,10 @@
 all: deps test
 
-up:
-	VAGRANT_EXPERIMENTAL=disks vagrant up
-
 down:
 	vagrant halt
 
-test: up
-	vagrant provision
+test:
+	VAGRANT_EXPERIMENTAL=disks vagrant up --provision
 
 deps:
 	ansible-galaxy install -r requirements.yml
