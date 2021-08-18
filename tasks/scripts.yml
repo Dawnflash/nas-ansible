@@ -47,15 +47,15 @@
     minute: "0"
     job: /root/bin/bitwarden_backup.sh
 
-- name: Install SystemD services
+- name: Install systemd services
   template:
     src: "{{ item }}"
     dest: /etc/systemd/system
   with_fileglob: "templates/systemd/*.service"
 
-- name: Start SystemD services
+- name: Restart systemd services
   systemd:
     name: "{{ item | basename }}"
     enabled: yes
-    state: started
+    state: restarted
   with_fileglob: "templates/systemd/*.service"

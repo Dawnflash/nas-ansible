@@ -1,0 +1,12 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ network.uplink }}:
+      match:
+        name: "{{ network.uplink }}"
+      addresses:
+      - "{{ network.ipv6 }}/128"
+      dhcp4: true
+      dhcp6: false
+      ipv6-privacy: true

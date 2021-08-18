@@ -14,7 +14,8 @@ network:
   ipv4: 192.168.0.115
   ipv6: 2a02:8308:305:7f00::abcd
   uplink: enp7s0
-  netplan: 20-openmediavault-enp7s0.yaml
+  netplan: uplink.yaml
+  managed: yes
 
 conf_directory: /ssd-data
 

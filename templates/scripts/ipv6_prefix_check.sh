@@ -58,7 +58,7 @@ while true; do
   echo "Replacing IPv6: $OLD_ADDR -> $NEW_ADDR"
   sed -i "s/$OLD_ADDR/$NEW_ADDR/" $PLAN
   netplan apply
-  sleep 5
+  sleep 60
   dkr_update
   cf_update
   tg_notify

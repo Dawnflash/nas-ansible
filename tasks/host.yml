@@ -16,3 +16,41 @@
   - name: Reload chrony sources
     command: chronyc reload sources
     when: chrony_src.changed
+
+- block:
+  - name: Check legacy network conf
+    stat:
+      path: "{{ legacy_conf_path }}"
+    register: legacy_conf
+
+  - name: Backup legacy network conf
+    copy:
+      src: "{{ legacy_conf_path }}"
+      dest: "{{ legacy_conf_path }}.bak"
+      mode: preserve
+    when: legacy_conf.stat.exists
+
+  - name: Remove legacy network conf
+    file:
+      path: "{{ legacy_conf_path }}"
+      state: absent
+
+  - name: Install netplan conf
+    template:
+      src: netplan/{{ network.netplan }}
+      dest: /etc/netplan
+    register: netplan_conf
+  
+  - name: Enable networkd
+    systemd:
+      name: systemd-networkd
+      enabled: yes
+      state: started
+
+  - name: Apply netplan
+    command: netplan apply
+    when: netplan_conf.changed
+
+  when: network.managed
+  vars:
+    legacy_conf_path: /etc/network/interfaces

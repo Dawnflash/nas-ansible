@@ -1,3 +1,5 @@
 all:
-  hosts:
-    nas.dawnflash.cz:
+  children:
+    nas:
+      hosts:
+        nas.dawnflash.cz:
