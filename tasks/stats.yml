@@ -4,12 +4,6 @@
     enabled: yes
     state: started
 
-- name: Start Telegraf
-  systemd:
-    name: telegraf
-    enabled: yes
-    state: started
-
 - block:
   - name: Check for root InfluxDB configuration
     stat:
@@ -37,3 +31,9 @@
       name: telegraf
       state: restarted
     when: not influx_token.stat.exists or telegraf_conf.changed
+
+- name: Start Telegraf
+  systemd:
+    name: telegraf
+    enabled: yes
+    state: started
