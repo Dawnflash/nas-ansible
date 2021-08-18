@@ -1,0 +1,6 @@
+- name: Ensure ZFS
+  shell: dkms autoinstall && modprobe zfs && zpool import -f
+
+- name: Run Samba role
+  include_role:
+    name: bertvv.samba

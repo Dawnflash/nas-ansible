@@ -11,9 +11,9 @@
 
     <h2>Available services:</h2>
     <ul>
-{% for subdom in nginx.proxy.keys() -%}
+{% for subdom in nginx.proxy.keys() %}
       <li><a href="https://{{ subdom }}.{{ hostname }}">{{ subdom }}</a></li>
-{% endfor -%}
+{% endfor %}
     </ul>
   </body>
 </html>

@@ -24,6 +24,21 @@ docker:
   stacks:
     - main
 
+# ---- bertvv.samba ------
+samba_apple_extensions: yes
+samba_log: systemd
+samba_shares_root: /Master
+samba_users:
+  - name: "{{ unprivileged_user.name }}"
+    password: "{{ unprivileged_user.password | quote }}"
+samba_shares:
+  - name: Backup
+    owner: "{{ unprivileged_user.name }}"
+  - name: Media
+    owner: "{{ unprivileged_user.name }}"
+  - name: Random
+    owner: "{{ unprivileged_user.name }}"
+
 nginx:
   paths:
     html: /var/www/nas

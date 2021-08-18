@@ -51,6 +51,6 @@
     command: netplan apply
     when: netplan_conf.changed
 
-  when: network.managed
+  when: network.managed and local_run is not defined
   vars:
     legacy_conf_path: /etc/network/interfaces

@@ -3,5 +3,4 @@ all:
     nas:
       hosts:
         ansible-nas-test:
-          ansible_host: localhost
-          ansible_connection: local
+          ansible_host: 172.10.0.2

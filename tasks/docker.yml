@@ -53,3 +53,7 @@
       name: docker
       state: reloaded
     when: daemon_json.changed
+
+- name: Upgrade docker stacks
+  command: /root/bin/docker_upgrade.sh
+  when: local_run is not defined
