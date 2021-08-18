@@ -29,6 +29,13 @@
     mode: 0755
   with_fileglob: "templates/scripts/*"
 
+- name: Install global scripts
+  template:
+    src: "{{ item }}"
+    dest: /usr/local/bin
+    mode: 0755
+  with_fileglob: "templates/bin/*"
+
 - name: Create private directory
   file:
     path: "{{ conf_directory }}/private"

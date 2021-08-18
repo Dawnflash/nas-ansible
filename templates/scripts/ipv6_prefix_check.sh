@@ -1,10 +1,7 @@
 #!/bin/bash
 
 CF_ZONE={{ cloudflare.zone }}
-TG_CHAT={{ telegram.chat }}
-TG_TOKEN={{ telegram.token }}
 
-TG_BASE="https://api.telegram.org/bot${TG_TOKEN}"
 DKR_CONFIG=/etc/docker/daemon.json
 INTF={{ network.uplink }}
 SFX="::abcd"
@@ -13,8 +10,8 @@ SEL='\s[0-9a-f]*:[0-9a-f]*:[0-9a-f]*:[0-9a-f]*'
 
 tg_notify () {
   echo Sending TG notification
-  MSG="[NAS Networking] IPv6 changed: $OLD_ADDR -> $NEW_ADDR\nPlease update Ansible configuration."
-  curl -s "$TG_BASE/sendMessage" -d "chat_id=$TG_CHAT" -d "text=$MSG"
+  MSG="*\[NAS Networking\]* IPv6 changed: $OLD_ADDR \-\> $NEW_ADDR\nPlease update Ansible configuration\."
+  telegram-send $MSG
 }
 
 dkr_update () {

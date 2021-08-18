@@ -1,0 +1,35 @@
+#!/bin/bash
+
+TG_CHAT={{ telegram.chat }}
+TG_TOKEN={{ telegram.token }}
+
+TG_BASE="https://api.telegram.org/bot${TG_TOKEN}"
+TG_SILENT=false
+TG_MODE=MarkdownV2
+
+usage () {
+  echo "Usage: telegram-send [-s (suppress notification)] [-m <mode:[MarkdownV2]|Markdown|HTML>] <message>"
+  exit 1
+}
+
+while getopts "sm:" opt; do
+  case $opt in
+    s)
+      TG_SILENT=true
+      ;;
+    m)
+      TG_MODE=$OPTARG
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+if [ $# -ne 1 ]; then
+  usage
+fi
+
+MSG="$(echo -ne "$1")"
+curl -s "$TG_BASE/sendMessage" -d "parse_mode=$TG_MODE" -d "chat_id=$TG_CHAT" -d "text=$MSG" -d "disable_notification=$TG_SILENT"
