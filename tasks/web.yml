@@ -8,7 +8,7 @@
     shell: |
       certbot certonly {{ certbot_flags | default(omit) }} -n \
       -d {{ hostname }} -d "*.{{ hostname }}" \
-      --agree-tos --email {{ emails.dawn }} \
+      --agree-tos --email {{ email.recipients.dawn }} \
       --post-hook /root/bin/cert_postrenew.sh \
       --dns-cloudflare --dns-cloudflare-credentials {{ conf_directory }}/private/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
@@ -31,6 +31,7 @@
       src: "{{ item }}"
       dest: "{{ avail_dir }}"
     with_fileglob: "templates/nginx/conf/static/*"
+    register: nginx_conf_static
 
   - name: Enable static nginx configuration
     file:
@@ -44,6 +45,7 @@
       src: nginx/conf/template.conf
       dest: "{{ avail_dir }}/{{ item.key }}"
     loop: "{{ nginx.proxy | dict2items }}"
+    register: nginx_conf_proxy
 
   - name: Enable proxy nginx configuration
     file:
@@ -60,3 +62,4 @@
   systemd:
     name: nginx
     state: reloaded
+  when: nginx_conf_static.changed or nginx_conf_proxy.changed

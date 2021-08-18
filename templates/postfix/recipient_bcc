@@ -1,0 +1,1 @@
+{% for rec in email.recipients.values() -%} {{ rec }} {% endfor %}

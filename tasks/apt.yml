@@ -9,6 +9,8 @@
     name:
     - zfsutils-linux
     - postfix
+    - bsd-mailx # mail executable
+    - libsasl2-modules # postfix SASL authentication
     - nginx
     - zsh
     - apt-transport-https
@@ -29,7 +31,6 @@
     - jq
     - hddtemp
     - lm-sensors
-    - python3-yaml
 
 - block:
   - name: Install armored APT GPG keys

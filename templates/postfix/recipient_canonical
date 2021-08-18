@@ -1,0 +1,3 @@
+root {{ email.recipients.dawn }}
+admin {{ email.recipients.dawn }}
+@{{ hostname }} {{ email.recipients.dawn }}

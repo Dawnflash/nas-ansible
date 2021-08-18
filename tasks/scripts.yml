@@ -52,6 +52,7 @@
     src: "{{ item }}"
     dest: /etc/systemd/system
   with_fileglob: "templates/systemd/*.service"
+  register: systemd_services_conf
 
 - name: Restart systemd services
   systemd:
@@ -59,3 +60,4 @@
     enabled: yes
     state: restarted
   with_fileglob: "templates/systemd/*.service"
+  when: systemd_services_conf.changed

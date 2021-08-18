@@ -1,0 +1,19 @@
+- name: Configure postfix
+  template:
+    src: "{{ item }}"
+    dest: /etc/postfix
+  with_fileglob: "templates/postfix/*"
+  register: postfix_conf
+
+- name: Ensure postfix runs
+  systemd:
+    name: postfix
+    enabled: yes
+    state: started
+  register: postfix_up
+
+- name: Restart postfix
+  systemd:
+    name: postfix
+    state: restarted
+  when: not postfix_up.changed and postfix_conf.changed

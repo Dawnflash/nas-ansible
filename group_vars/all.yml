@@ -109,10 +109,6 @@ nginx:
       extra:
         client_max_body_size: 128M
 
-emails:
-  dawn: adamzahumensky@gmail.com
-  meow: volek@adamv.cz
-
 apt_gpg_keys:
   armor:
     docker:
@@ -128,6 +124,22 @@ influxdb:
   primary_bucket:
     name: main
     retention: 0
+
+email:
+  from: robot
+  recipients:
+    dawn: adamzahumensky@gmail.com
+    meow: volek@adamv.cz
+  relay:
+    host: mail.e-kom.cz:465
+    user: zahumensky@e-kom.cz
+    pass: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      37356539326635393065633830356339643861323732663431383732623132643039376334366234
+      6463306262346230373734356464333133353165336263300a323233373563356639376661366531
+      34343165623662663636396333393231393936623565336239613032366534386532363561613634
+      3063383661306165610a336436363937626638353630386235656337333034336136363033326265
+      3364
 
 unprivileged_user:
   name: snekurr
