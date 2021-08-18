@@ -33,12 +33,17 @@
     - lm-sensors
 
 - block:
-  - name: Install armored APT GPG keys
-    shell: |
-      curl -fsSL {{ item.value.gpg }} | gpg --yes --dearmor -o {{ trusted_gpg_d }}/{{ item.key }}.gpg
+  - name: Pull armored APT GPG keys
+    get_url:
+      url: "{{ item.value.gpg }}"
+      dest: "{{ trusted_gpg_d }}/{{ item.key }}.armor.gpg"
     loop: "{{ apt_gpg_keys.armor | dict2items }}"
-    args:
-      warn: false
+    register: apt_gpg_keys_armor_reg
+
+  - name: Install armored APT GPG keys
+    command: "gpg --yes -o {{ trusted_gpg_d }}/{{ item.key }}.gpg {{ trusted_gpg_d }}/{{ item.key }}.armor.gpg"
+    loop: "{{ apt_gpg_keys.armor | dict2items }}"
+    when: apt_gpg_keys_armor_reg.changed
 
   - name: Install binary APT GPG keys
     get_url:
@@ -52,16 +57,16 @@
       filename: "{{ item.key }}"
     loop: "{{ apt_gpg_keys.armor | combine(apt_gpg_keys.binary) | dict2items }}"
 
-  - name: Install additional packages
-    apt:
-      update_cache: yes
-      name:
-        - docker-ce
-        - influxdb2
-        - telegraf
-
   vars:
     trusted_gpg_d: /etc/apt/trusted.gpg.d
+
+- name: Install additional packages
+  apt:
+    update_cache: yes
+    name:
+      - docker-ce
+      - influxdb2
+      - telegraf
 
 - name: Perform safe upgrade
   apt:

@@ -60,3 +60,40 @@
   when: network.managed and local_run is not defined
   vars:
     legacy_conf_path: /etc/network/interfaces
+
+- name: Configure host SSH
+  template:
+    src: "{{ item }}"
+    dest: /etc/ssh
+  with_fileglob: "templates/ssh/host/*"
+  register: ssh_config
+
+- name: Reload SSH
+  systemd:
+    name: ssh
+    state: reloaded
+  when: ssh_config.changed
+
+- name: Create root SSH directory
+  file:
+    path: /root/.ssh
+    mode: 0700
+    state: directory
+
+- name: Install root SSH authorized_keys
+  template:
+    src: ssh/user/authorized_keys
+    dest: /root/.ssh
+
+- name: Create unprivileged user SSH directory
+  file:
+    path: "{{ unprivileged_user_reg.home }}/.ssh"
+    mode: 0700
+    owner: "{{ unprivileged_user.name }}"
+    group: "{{ unprivileged_user.group }}"
+    state: directory
+
+- name: Install unprivileged user SSH authorized_keys
+  template:
+    src: ssh/user/authorized_keys
+    dest: "{{ unprivileged_user_reg.home }}/.ssh"

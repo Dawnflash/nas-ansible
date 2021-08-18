@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     environment:
       - TZ={{ timezone }}
-      - PLEX_UID={{ unprivileged_user.uid }}
-      - PLEX_GID={{ unprivileged_user.gid }}
+      - PLEX_UID={{ unprivileged_user_reg.uid }}
+      - PLEX_GID={{ unprivileged_user_reg.group }}
         # Home network, Docker bridge network
       - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
       - VERSION=docker
@@ -21,8 +21,8 @@ services:
     container_name: deluge
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
       - DELUGE_LOGLEVEL=error #optional
     volumes:
@@ -39,8 +39,8 @@ services:
     container_name: tautulli
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/tautulli:/config"
@@ -56,8 +56,8 @@ services:
     container_name: bazarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/bazarr:/config"
@@ -74,8 +74,8 @@ services:
     container_name: radarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/radarr:/config"
@@ -92,8 +92,8 @@ services:
     container_name: sonarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/sonarr:/config"
@@ -110,8 +110,8 @@ services:
     container_name: lidarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/lidarr:/config"
@@ -128,8 +128,8 @@ services:
     container_name: readarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/readarr:/config"
@@ -172,8 +172,8 @@ services:
     container_name: nzbget
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/nzbget:/config"
@@ -189,8 +189,8 @@ services:
     container_name: ombi
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/ombi:/config"
@@ -204,7 +204,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
-    user: "{{ unprivileged_user.uid }}:{{ unprivileged_user.gid }}"
+    user: "{{ unprivileged_user_reg.uid }}:{{ unprivileged_user_reg.group }}"
     environment:
       - TZ={{ timezone }}
       - IP_HEADER=X-Real-IP
@@ -230,8 +230,8 @@ services:
     container_name: prowlarr
     restart: unless-stopped
     environment:
-      - PUID={{ unprivileged_user.uid }}
-      - PGID={{ unprivileged_user.gid }}
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
       - "{{ conf_directory }}/prowlarr:/config"

@@ -4,3 +4,4 @@ PermitRootLogin without-password
 PasswordAuthentication no
 StrictModes yes
 UseDNS no
+Subsystem sftp internal-sftp

@@ -1,5 +1,7 @@
 - name: Ensure ZFS
   shell: dkms autoinstall && modprobe zfs && zpool import -f
+  register: ensure_zfs
+  changed_when: ensure_zfs.stderr != "no pools available to import"
 
 - name: Run Samba role
   include_role:

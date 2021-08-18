@@ -2,9 +2,9 @@
   user:
     name: "{{ unprivileged_user.name }}"
     password: "{{ unprivileged_user.password | string | password_hash('sha512', unprivileged_user.salt) }}"
-    group: users
-    uid: "{{ unprivileged_user.uid }}"
+    group: "{{ unprivileged_user.group }}"
     shell: /bin/zsh
+  register: unprivileged_user_reg
 
 - name: Configure root user
   user:

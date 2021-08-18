@@ -25,6 +25,12 @@ docker:
   stacks:
     - main
 
+ssh:
+  pubkeys:
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM5692OdhpKwg1NfL2eU34F/F5fTs80L3R8Jh+3ibU6S dawnmeow@nas
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMGPWHaD9juzifk6TRW648maJSBZTUZur+5Y5lwSJxlD adam@luna
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMyH0XS5sGe4TpqFvlBW0xqtvVTtwdyi2kThcCbaUXFz adam@op7p
+
 # ---- bertvv.samba ------
 samba_apple_extensions: yes
 samba_log: systemd
@@ -144,9 +150,8 @@ email:
 
 unprivileged_user:
   name: snekurr
-  uid: 2000
-  gid: 100
   salt: NvpGkzGFwHWCKp57
+  group: users
   password: !vault |
     $ANSIBLE_VAULT;1.1;AES256
     31633834363933616362333734623830346338636633343535353965326562613966656565623661
