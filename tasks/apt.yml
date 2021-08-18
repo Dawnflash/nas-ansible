@@ -36,12 +36,12 @@
   - name: Pull armored APT GPG keys
     get_url:
       url: "{{ item.value.gpg }}"
-      dest: "{{ trusted_gpg_d }}/{{ item.key }}.armor.gpg"
+      dest: "/etc/apt/{{ item.key }}.armor.gpg"
     loop: "{{ apt_gpg_keys.armor | dict2items }}"
     register: apt_gpg_keys_armor_reg
 
   - name: Install armored APT GPG keys
-    command: "gpg --yes -o {{ trusted_gpg_d }}/{{ item.key }}.gpg {{ trusted_gpg_d }}/{{ item.key }}.armor.gpg"
+    command: "gpg --dearmor --yes -o {{ trusted_gpg_d }}/{{ item.key }}.gpg /etc/apt/{{ item.key }}.armor.gpg"
     loop: "{{ apt_gpg_keys.armor | dict2items }}"
     when: apt_gpg_keys_armor_reg.changed
 
