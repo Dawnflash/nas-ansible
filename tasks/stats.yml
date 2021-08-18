@@ -12,10 +12,10 @@
 
   - name: Setup InfluxDB
     shell: |
-      influx setup -f -u admin -p {{ root.password }} -o {{ influx_setup.primary_org }} \
-      -b {{ influx_setup.primary_bucket.name }} -r {{ influx_setup.primary_bucket.retention }}
+      influx setup -f -u admin -p {{ root.password }} -o {{ influxdb.primary_org }} \
+      -b {{ influxdb.primary_bucket.name }} -r {{ influxdb.primary_bucket.retention }}
       influx user create -n telegraf
-      BUCKET=$(influx bucket list -n {{ influx_setup.primary_bucket.name }} --json | jq -r '.[0].id')
+      BUCKET=$(influx bucket list -n {{ influxdb.primary_bucket.name }} --json | jq -r '.[0].id')
       TOKEN=$(influx auth create -u telegraf --read-bucket $BUCKET --write-bucket $BUCKET --json | jq -r '.token')
       echo "INFLUX_TOKEN=$TOKEN" >/etc/default/telegraf
     when: not influx_token.stat.exists

@@ -108,7 +108,7 @@ apt_gpg_keys:
       repo: https://repos.influxdata.com/debian {{ debian_version }} stable
   binary: {}
 
-influx_setup:
+influxdb:
   primary_org: cattos
   primary_bucket:
     name: main
