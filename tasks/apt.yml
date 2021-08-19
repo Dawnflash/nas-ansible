@@ -20,6 +20,7 @@
     - wget
     - vim
     - htop
+    - strace
     - zstd
     - wireguard
     - pv

@@ -5,13 +5,24 @@
     register: le_conf
 
   - name: Configure LE cert for {{ hostname }}
-    shell: |
+    command: |
       certbot certonly {{ certbot_flags | default(omit) }} -n \
       -d {{ hostname }} -d "*.{{ hostname }}" \
       --agree-tos --email {{ email.recipients.dawn }} \
       --post-hook /root/bin/cert_postrenew.sh \
       --dns-cloudflare --dns-cloudflare-credentials {{ ssd_storage.root }}/private/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
+    register: le_cert_reg
+
+  - name: Warn about failing hook
+    debug:
+      msg:
+        - LE post-hook failed. This is likely caused by SSH issues.
+        - Consult /var/log/letsencrypt/letsencrypt.log
+        - Rerun the hook later to ensure proxy certificates are in sync.
+    when:
+      - not le_cert_reg.skipped
+      - '"Error output from post-hook command" in le_cert_reg.stderr'
 
 - name: Create web-related directories
   file:

@@ -1,0 +1,7 @@
+Include /etc/ssh/ssh_config.d/*.conf
+
+Host *
+  StrictHostKeyChecking no
+  HashKnownHosts yes
+  SendEnv LANG LC_*
+  PasswordAuthentication no

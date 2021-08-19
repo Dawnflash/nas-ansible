@@ -62,6 +62,11 @@
   vars:
     legacy_conf_path: /etc/network/interfaces
 
+- name: Set MOTD
+  template:
+    src: "motd"
+    dest: /etc
+
 - name: Configure host SSH
   template:
     src: "{{ item }}"
@@ -98,6 +103,33 @@
   template:
     src: ssh/user/authorized_keys
     dest: "{{ unprivileged_user_reg.home }}/.ssh"
+
+- block:
+  - name: Check root SSH keypair
+    stat:
+      path: "{{ priv_key }}"
+    register: root_priv_key_reg
+
+  - name: Generate root SSH keypair
+    command: ssh-keygen -t {{ ssh.root_key.algo }} -f {{ priv_key }} -N ""
+    when: not root_priv_key_reg.stat.exists
+
+  - name: Register root SSH pubkey
+    command: cat {{ priv_key }}.pub
+    changed_when: false
+    when: not root_priv_key_reg.stat.exists
+    register: root_pub_key
+
+  - name: Output root SSH pubkey
+    debug:
+      msg:
+        - New SSH keypair was generated. Install it where applicable.
+        - IPv4 proxy SSL sync will not work until you install it there.
+        - "{{ root_pub_key.stdout }}"
+    when: not root_pub_key.skipped
+
+  vars:
+    priv_key: /root/.ssh/id_{{ ssh.root_key.algo }}
 
 - block:
   - name: Install kernel EFI post-install hook

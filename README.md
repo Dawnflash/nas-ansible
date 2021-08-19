@@ -13,10 +13,10 @@ Just reload and reprovision by `make down test`.
 
 The setup uses a persistent disk to facilitate storage testing. Remove it with `make rmdisk`.
 
-**Do not run vagrant destroy** or you'll lose your persistent disk. Use `make destroy` instead.
+**Do not run `vagrant destroy`** before `vagrant halt` or you'll lose your persistent disk. Use `make destroy` instead.
 
 If you don't have it populated with a zpool yet, your provisioning will fail on ZFS checks. This is OK.
-Reload and SSH in: `make reload ssh` and create your pool and datasets. To pass storage tests, all samba shares defined in [group_vars/nas.yml](group_vars/nas.yml) must be valid.
+Reload and SSH in: `make reload ssh` and create your pool and datasets. To pass storage tests, all samba shares defined in [group_vars/all.yml](group_vars/all.yml) must be valid.
 Storage tasks should pass now.
 
 ```
