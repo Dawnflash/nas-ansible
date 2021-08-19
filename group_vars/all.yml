@@ -78,8 +78,6 @@ nginx:
       port: 8181
     ombi:
       port: 3579
-    docker:
-      port: 9000
     bazarr:
       port: 6767
     radarr:
