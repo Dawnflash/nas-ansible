@@ -8,6 +8,7 @@
     update_cache: yes
     name:
     - zfsutils-linux
+    - btrfs-progs
     - postfix
     - bsd-mailx # mail executable
     - libsasl2-modules # postfix SASL authentication
