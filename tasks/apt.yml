@@ -37,6 +37,7 @@
     get_url:
       url: "{{ item.value.gpg }}"
       dest: "/etc/apt/{{ item.key }}.armor.gpg"
+      force: yes
     loop: "{{ apt_gpg_keys.armor | dict2items }}"
     register: apt_gpg_keys_armor_reg
 
@@ -49,6 +50,7 @@
     get_url:
       url: "{{ item.value.gpg }}"
       dest: "{{ trusted_gpg_d }}/{{ item.key }}.gpg"
+      force: yes
     loop: "{{ apt_gpg_keys.binary | dict2items }}"
 
   - name: Add signed repositories

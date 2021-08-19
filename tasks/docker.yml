@@ -5,33 +5,30 @@
     state: started
 
 - block:
-  - name: Check for Docker compose V2
-    stat:
-      path: "{{ plugin_dir }}/docker-compose"
-    register: stat_result
+  - name: Create Docker plugin directory
+    file:
+      path: "{{ plugin_dir }}"
+      state: directory
 
-  - name: Install Docker compose V2
-    shell: |
-      mkdir -p {{ plugin_dir }}
-      curl -fsSL https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64 -o {{ plugin_dir }}/docker-compose
-      chmod +x {{ plugin_dir }}/docker-compose
-    args:
-      warn: false
-    when: not stat_result.stat.exists
+  - name: Install docker-compose plugin
+    get_url:
+      url: https://github.com/docker/compose-cli/releases/download/{{ docker.compose_version }}/docker-compose-linux-amd64
+      dest: "{{ plugin_dir }}/docker-compose"
+      mode: 0755
 
   vars:
     plugin_dir: /root/.docker/cli-plugins
 
 - name: Create compose stack directories
   file:
-    path: "{{ conf_directory }}/docker/{{ item }}"
+    path: "{{ ssd_storage.root }}/docker/{{ item }}"
     state: directory
   loop: "{{ docker.stacks }}"
 
 - name: Update compose stacks
   template:
     src: docker/docker-compose/{{ item }}.yml
-    dest: "{{ conf_directory }}/docker/{{ item }}/docker-compose.yml"
+    dest: "{{ ssd_storage.root }}/docker/{{ item }}/docker-compose.yml"
   loop: "{{ docker.stacks }}"
 
 - name: Add unprivileged user to Docker group

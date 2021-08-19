@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SDIR={{ conf_directory }}/bitwarden
+SDIR={{ ssd_storage.root }}/bitwarden
 DDIR=/Master/Backup/bitwarden
 TMPDIR=/tmp
 KEEP_DAYS=7

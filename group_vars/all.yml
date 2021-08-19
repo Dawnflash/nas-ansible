@@ -18,12 +18,19 @@ network:
   netplan: uplink.yaml
   managed: yes
 
-conf_directory: /ssd-data
+zpool_name: Master
+ssd_storage:
+  root: /ssd-data
+  root_dirs:
+    - private
+  unprivileged_dirs:
+    - bitwarden
 
 docker:
   ipv6_cidr: 2a02:8308:305:7f00:1::/80
   stacks:
     - main
+  compose_version: v2.0.0-rc.1
 
 ssh:
   pubkeys:
@@ -34,17 +41,23 @@ ssh:
 # ---- bertvv.samba ------
 samba_apple_extensions: yes
 samba_log: systemd
-samba_shares_root: /Master
+samba_shares_root: /{{ zpool_name }}
 samba_users:
   - name: "{{ unprivileged_user.name }}"
     password: "{{ unprivileged_user.password | quote }}"
+
+_share_defaults: &share_defaults
+  owner: "{{ unprivileged_user.name }}"
+  group: "{{ unprivileged_user.group }}"
+  directory_mode: "0755"
+
 samba_shares:
   - name: Backup
-    owner: "{{ unprivileged_user.name }}"
+    <<: *share_defaults
   - name: Media
-    owner: "{{ unprivileged_user.name }}"
+    <<: *share_defaults
   - name: Random
-    owner: "{{ unprivileged_user.name }}"
+    <<: *share_defaults
 
 nginx:
   paths:

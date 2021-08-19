@@ -10,7 +10,7 @@
       -d {{ hostname }} -d "*.{{ hostname }}" \
       --agree-tos --email {{ email.recipients.dawn }} \
       --post-hook /root/bin/cert_postrenew.sh \
-      --dns-cloudflare --dns-cloudflare-credentials {{ conf_directory }}/private/cloudflare_dawnflash.cz.ini
+      --dns-cloudflare --dns-cloudflare-credentials {{ ssd_storage.root }}/private/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
 
 - name: Create web-related directories

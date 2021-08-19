@@ -1,8 +1,44 @@
-- name: Ensure ZFS
-  shell: dkms autoinstall && modprobe zfs && zpool import -f
+- name: Ensure ZFS pool is available
+  shell: modprobe zfs && zpool import -fa
   register: ensure_zfs
   changed_when: ensure_zfs.stderr != "no pools available to import"
+
+- name: Validate presence of mounted ZFS datasets
+  command: zfs list -Ho mounted
+  register: zfs_mount_check
+  changed_when: false
+  failed_when: zfs_mount_check.stdout_lines | length <= samba_shares | length or "no" in zfs_mount_check.stdout_lines
+
+- name: Fetch ZFS datasets
+  command: zfs list -Ho name
+  register: zfs_datasets
+  changed_when: false
+
+- name: Validate presence of Samba shares
+  fail:
+    msg: "{{ item.name }} share not present!"
+  when: "[zpool_name, item.name] | join('/') not in zfs_datasets.stdout_lines"
+  loop: "{{ samba_shares }}"
 
 - name: Run Samba role
   include_role:
     name: bertvv.samba
+
+- name: Create SSD storage root
+  file:
+    path: "{{ ssd_storage.root }}"
+    state: directory
+
+- name: Create root SSD storage subdirectories
+  file:
+    path: "{{ ssd_storage.root }}/{{ item }}"
+    state: directory
+  loop: "{{ ssd_storage.root_dirs }}"
+
+- name: Create unprivileged SSD storage subdirectories
+  file:
+    path: "{{ ssd_storage.root }}/{{ item }}"
+    owner: "{{ unprivileged_user.name }}"
+    group: "{{ unprivileged_user.group }}"
+    state: directory
+  loop: "{{ ssd_storage.unprivileged_dirs }}"

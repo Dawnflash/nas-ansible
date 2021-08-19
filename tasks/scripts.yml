@@ -36,15 +36,10 @@
     mode: 0755
   with_fileglob: "templates/bin/*"
 
-- name: Create private directory
-  file:
-    path: "{{ conf_directory }}/private"
-    state: directory
-
 - name: Install private files
   template:
     src: "{{ item }}"
-    dest: "{{ conf_directory }}/private"
+    dest: "{{ ssd_storage.root }}/private"
   with_fileglob: "templates/private/*"
 
 - name: Install Bitwarden backup crontab

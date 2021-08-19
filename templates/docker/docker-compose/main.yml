@@ -12,8 +12,8 @@ services:
       - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
       - VERSION=docker
     volumes:
-      - "{{ conf_directory }}/plex:/config"
-      - "{{ conf_directory }}/plex:/transcode"
+      - "{{ ssd_storage.root }}/plex:/config"
+      - "{{ ssd_storage.root }}/plex:/transcode"
       - /Master/Media:/Media
     network_mode: host
   deluge:
@@ -26,8 +26,8 @@ services:
       - TZ={{ timezone }}
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - "{{ conf_directory }}/deluge:/config"
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/deluge:/config"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
       - 8112:8112
     networks:
@@ -43,8 +43,8 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/tautulli:/config"
-      - "{{ conf_directory }}/plex/Library/Application Support/Plex Media Server/Logs:/logs"
+      - "{{ ssd_storage.root }}/tautulli:/config"
+      - "{{ ssd_storage.root }}/plex/Library/Application Support/Plex Media Server/Logs:/logs"
     ports:
      - 8181:8181
     networks:
@@ -60,7 +60,7 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/bazarr:/config"
+      - "{{ ssd_storage.root }}/bazarr:/config"
       - /Master/Media/Movies:/movies
       - /Master/Media/Series:/tv
     ports:
@@ -78,9 +78,9 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/radarr:/config"
+      - "{{ ssd_storage.root }}/radarr:/config"
       - /Master/Media/Movies:/movies
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
       - 7878:7878
     networks:
@@ -96,9 +96,9 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/sonarr:/config"
+      - "{{ ssd_storage.root }}/sonarr:/config"
       - /Master/Media/Series:/tv
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
       - 8989:8989
     networks:
@@ -114,9 +114,9 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/lidarr:/config"
+      - "{{ ssd_storage.root }}/lidarr:/config"
       - /Master/Media/Music:/music
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
       - 8686:8686
     networks:
@@ -132,8 +132,8 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/readarr:/config"
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/readarr:/config"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
       - /Master/Media/Books:/books
     ports:
       - 8787:8787
@@ -155,8 +155,8 @@ services:
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     volumes:
-      - "{{ conf_directory }}/dns/pihole:/etc/pihole"
-      - "{{ conf_directory }}/dns/dnsmasq:/etc/dnsmasq.d"
+      - "{{ ssd_storage.root }}/dns/pihole:/etc/pihole"
+      - "{{ ssd_storage.root }}/dns/dnsmasq:/etc/dnsmasq.d"
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -176,8 +176,8 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/nzbget:/config"
-      - "{{ conf_directory }}/downloads:/downloads"
+      - "{{ ssd_storage.root }}/nzbget:/config"
+      - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
       - 6789:6789
     networks:
@@ -193,7 +193,7 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/ombi:/config"
+      - "{{ ssd_storage.root }}/ombi:/config"
     ports:
       - 3579:3579
     networks:
@@ -217,7 +217,7 @@ services:
       - DOMAIN=https://bitwarden.{{ hostname }}
       - ROCKET_PORT=12004
     volumes:
-      - "{{ conf_directory }}/bitwarden:/data"
+      - "{{ ssd_storage.root }}/bitwarden:/data"
     ports:
       - 12004:12004
       - 12005:12005
@@ -234,7 +234,7 @@ services:
       - PGID={{ unprivileged_user_reg.group }}
       - TZ={{ timezone }}
     volumes:
-      - "{{ conf_directory }}/prowlarr:/config"
+      - "{{ ssd_storage.root }}/prowlarr:/config"
     ports:
       - 9696:9696
     networks:
