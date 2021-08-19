@@ -53,4 +53,4 @@
 
 - name: Upgrade docker stacks
   command: /root/bin/docker_upgrade.sh
-  when: local_run is not defined
+  when: manage_containers

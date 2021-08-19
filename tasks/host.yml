@@ -33,6 +33,7 @@
     copy:
       src: "{{ legacy_conf_path }}"
       dest: "{{ legacy_conf_path }}.bak"
+      remote_src: yes
       mode: preserve
     when: legacy_conf.stat.exists
 
@@ -57,7 +58,7 @@
     command: netplan apply
     when: netplan_conf.changed
 
-  when: network.managed and local_run is not defined
+  when: manage_network
   vars:
     legacy_conf_path: /etc/network/interfaces
 
@@ -97,3 +98,17 @@
   template:
     src: ssh/user/authorized_keys
     dest: "{{ unprivileged_user_reg.home }}/.ssh"
+
+- block:
+  - name: Install kernel EFI post-install hook
+    copy:
+      src: files/systemdboot/zz_copy_efi
+      dest: /etc/kernel/postinst.d
+      mode: 0755
+    register: efi_postinst_hook
+
+  - name: Run kernel EFI post-install hook
+    shell: /etc/kernel/postinst.d/zz_copy_efi "$(uname -r)"
+    when: efi_postinst_hook.changed
+
+  when: use_systemdboot

@@ -3,6 +3,11 @@ debian_repo_base: http://ftp.sh.cvut.cz/debian/
 hostname: nas.dawnflash.cz
 timezone: Europe/Prague
 locale: C.UTF-8
+
+manage_network: yes
+manage_containers: yes
+use_systemdboot: yes
+
 ntp_servers:
   - tik.cesnet.cz
   - tak.cesnet.cz
@@ -16,7 +21,6 @@ network:
   ipv6: 2a02:8308:305:7f00::abcd
   uplink: enp7s0
   netplan: uplink.yaml
-  managed: yes
 
 zpool_name: Master
 ssd_storage:
