@@ -26,3 +26,9 @@ deps:
 
 ssh:
 	vagrant ssh
+
+deploy-local:
+	ansible-playbook -l nas.local -i inventories/nas/inventory.yml nas.yml
+
+deploy:
+	ansible-playbook -l nas.dawnflash.cz -i inventories/nas/inventory.yml nas.yml

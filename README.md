@@ -25,3 +25,12 @@ $ zpool create Master sdb
 $ zfs create Master/Backup
 ...
 ```
+
+## Deployment
+
+These commands let you deploy to live environment. For initial setup local approach might be easier.
+
+See [inventories/nas](inventories/nas) for the used configuration.
+
+- `make deploy`: use domain name
+- `make deploy-local`: use local IP
