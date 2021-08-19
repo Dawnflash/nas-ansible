@@ -5,6 +5,8 @@ DDIR=/Master/Backup/bitwarden
 TMPDIR=/tmp
 KEEP_DAYS=7
 
+zfs list Master/Backup -Ho mounted | grep -q yes || { echo "Error: ZFS not mounted"; exit 1; }
+
 DB_FILE=db.sqlite3
 CONFIG_FILE=config.json
 ATTACH_DIR=attachments
