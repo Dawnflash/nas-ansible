@@ -34,6 +34,7 @@
     - hddtemp
     - lm-sensors
     - sqlite3
+    - chrony
 
 - block:
   - name: Pull armored APT GPG keys

@@ -1,3 +1,10 @@
+
+- name: Configure Docker
+  template:
+    src: docker/daemon.json
+    dest: /etc/docker
+  register: daemon_json
+
 - name: Start Docker
   systemd:
     name: docker
@@ -38,18 +45,11 @@
       - docker
     append: yes
 
-- block:
-  - name: Configure Docker
-    template:
-      src: docker/daemon.json
-      dest: /etc/docker
-    register: daemon_json
-
-  - name: Reload Docker
-    systemd:
-      name: docker
-      state: reloaded
-    when: daemon_json.changed
+- name: Reload Docker
+  systemd:
+    name: docker
+    state: reloaded
+  when: daemon_json.changed
 
 - name: Upgrade docker stacks
   command: /root/bin/docker_upgrade.sh

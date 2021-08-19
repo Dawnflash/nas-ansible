@@ -6,7 +6,7 @@
 
   - name: Configure LE cert for {{ hostname }}
     command: |
-      certbot certonly {{ certbot_flags | default(omit) }} -n \
+      certbot certonly {{ certbot_flags }} -n \
       -d {{ hostname }} -d "*.{{ hostname }}" \
       --agree-tos --email {{ email.recipients.dawn }} \
       --post-hook /root/bin/cert_postrenew.sh \
@@ -21,7 +21,7 @@
         - Consult /var/log/letsencrypt/letsencrypt.log
         - Rerun the hook later to ensure proxy certificates are in sync.
     when:
-      - not le_cert_reg.skipped
+      - '"stderr" in le_cert_reg'
       - '"Error output from post-hook command" in le_cert_reg.stderr'
 
 - name: Create web-related directories

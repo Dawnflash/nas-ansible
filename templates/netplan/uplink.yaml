@@ -6,7 +6,7 @@ network:
       match:
         name: "{{ network.uplink }}"
       addresses:
-      - "{{ network.ipv6 }}/128"
+      - {{ network.ipv6 }}/128
       dhcp4: true
       dhcp6: false
       ipv6-privacy: true

@@ -126,7 +126,7 @@
         - New SSH keypair was generated. Install it where applicable.
         - IPv4 proxy SSL sync will not work until you install it there.
         - "{{ root_pub_key.stdout }}"
-    when: not root_pub_key.skipped
+    when: '"stdout" in root_pub_key'
 
   vars:
     priv_key: /root/.ssh/id_{{ ssh.root_key.algo }}
