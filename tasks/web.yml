@@ -10,7 +10,7 @@
       -d {{ hostname }} -d "*.{{ hostname }}" \
       --agree-tos --email {{ email.recipients.dawn }} \
       --post-hook /root/bin/cert_postrenew.sh \
-      --dns-cloudflare --dns-cloudflare-credentials {{ ssd_storage.root }}/private/cloudflare_dawnflash.cz.ini
+      --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
     register: le_cert_reg
 
@@ -53,17 +53,15 @@
 
   - name: Install proxy nginx configuration
     template:
-      src: nginx/conf/template.conf
-      dest: "{{ avail_dir }}/{{ item.key }}"
-    loop: "{{ nginx.proxy | dict2items }}"
+      src: nginx/conf/proxy.conf
+      dest: "{{ avail_dir }}/proxy"
     register: nginx_conf_proxy
 
   - name: Enable proxy nginx configuration
     file:
-      src: "{{ avail_dir }}/{{ item.key }}"
-      dest: "{{ enabl_dir }}/{{ item.key }}"
+      src: "{{ avail_dir }}/proxy"
+      dest: "{{ enabl_dir }}/proxy"
       state: link
-    loop: "{{ nginx.proxy | dict2items }}"
 
   vars:
     avail_dir: /etc/nginx/sites-available

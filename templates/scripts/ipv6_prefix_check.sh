@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CF_ZONE={{ cloudflare.zone }}
+CF_TOKEN={{ cloudflare.token }}
 
 DKR_CONFIG=/etc/docker/daemon.json
 INTF={{ network.uplink }}
@@ -22,8 +23,8 @@ dkr_update () {
 
 cf_update() {
   echo Updating Cloudflare AAAA record
-  ZID=$(cf_request GET "zones?name=$CF_ZONE" | jq -r .result[0].id)
-  RIDS=$(cf_request GET "zones/$ZID/dns_records?type=AAAA&content=$OLD_ADDR" | jq -r .result[].id)
+  ZID=$(cf_request GET "zones?name=$CF_ZONE" | jq -r '.result[0].id')
+  RIDS=$(cf_request GET "zones/$ZID/dns_records?type=AAAA&content=$OLD_ADDR" | jq -r '.result[].id')
   for RID in $RIDS; do
     cf_request PATCH "zones/$ZID/dns_records/$RID" "{\"content\":\"$NEW_ADDR\"}" | jq -r '.result.name + ": " + (.success | tostring)'
   done

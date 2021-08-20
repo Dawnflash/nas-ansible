@@ -1,0 +1,37 @@
+global:
+  scrape_interval: {{ prometheus.frequency }}
+  evaluation_interval: {{ prometheus.frequency }}
+  # scrape_timeout: 10s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      # monitor: 'example'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    # Uncomment when Alertmanager is installed (apt: prometheus-alertmanager)
+    # - targets: [localhost:9093]
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - first_rules.yml
+
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  # Scrape Prometheus metrics (self-monitoring)
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]
+
+  # Netdata scraper
+  - job_name: netdata
+    metrics_path: /api/v1/allmetrics
+    params:
+      format: [prometheus]
+      source: [average]
+    honor_labels: true
+    static_configs:
+      - targets: [localhost:19999]

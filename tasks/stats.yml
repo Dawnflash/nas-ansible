@@ -1,51 +1,3 @@
-- name: Start InfluxDB
-  systemd:
-    name: influxdb
-    enabled: yes
-    state: started
-
-- block:
-  - name: Check for root InfluxDB configuration
-    stat:
-      path: /root/.influxdbv2/configs
-    register: influx_token
-
-  - name: Setup InfluxDB
-    shell: |
-      influx setup -f -u admin -p {{ root.password }} -o {{ influxdb.primary_org }} \
-      -b {{ influxdb.primary_bucket.name }} -r {{ influxdb.primary_bucket.retention }}
-      influx user create -n telegraf
-      BUCKET=$(influx bucket list -n {{ influxdb.primary_bucket.name }} --json | jq -r '.[0].id')
-      TOKEN=$(influx auth create -u telegraf --read-bucket $BUCKET --write-bucket $BUCKET --json | jq -r '.token')
-      echo "INFLUX_TOKEN=$TOKEN" >/etc/default/telegraf
-    when: not influx_token.stat.exists
-
-  - name: Configure Telegraf
-    template:
-      src: telegraf/telegraf.conf
-      dest: /etc/telegraf
-    register: telegraf_conf
-
-  - name: Add telegraf user to docker group
-    user:
-      name: telegraf
-      groups:
-        - docker
-      append: yes
-    register: telegraf_user_conf
-
-  - name: Restart Telegraf
-    systemd:
-      name: telegraf
-      state: restarted
-    when: not influx_token.stat.exists or telegraf_conf.changed or telegraf_user_conf.changed
-
-- name: Start Telegraf
-  systemd:
-    name: telegraf
-    enabled: yes
-    state: started
-
 - name: Add Netdata user to Docker group
   user:
     name: netdata
@@ -54,13 +6,42 @@
     append: yes
 
 - name: Configure Netdata
-  copy:
-    src: files/netdata/netdata.conf
+  template:
+    src: "{{ item }}"
     dest: /etc/netdata
+  with_fileglob: "templates/netdata/*"
   register: netdata_conf_reg
+
+- name: Configure Netdata python modules
+  template:
+    src: "{{ item }}"
+    dest: /etc/netdata/python.d
+  with_fileglob: "templates/netdata/python.d/*"
+  register: netdata_python_conf_reg
 
 - name: Restart Netdata
   systemd:
     name: netdata
     state: restarted
-  when: netdata_conf_reg.changed
+  when: netdata_conf_reg.changed or netdata_python_conf_reg.changed
+
+- name: Configure Prometheus
+  template:
+    src: "{{ item }}"
+    dest: /etc/prometheus
+  with_fileglob: "templates/prometheus/*"
+  register: prometheus_conf_reg
+
+- name: Create Prometheus TSDB directory
+  file:
+    path: "{{ prometheus.storage_path }}"
+    owner: prometheus
+    group: prometheus
+    state: directory
+  register: prometheus_tsdb_reg
+
+- name: Restart Prometheus
+  systemd:
+    name: prometheus
+    state: restarted
+  when: etc_defaults.changed or prometheus_conf_reg.changed or prometheus_tsdb_reg.changed

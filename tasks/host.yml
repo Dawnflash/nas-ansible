@@ -11,6 +11,7 @@
     src: "{{ item }}"
     dest: /etc/default
   with_fileglob: "templates/default/*"
+  register: etc_defaults
 
 - block:
   - name: Set NTP servers
@@ -130,6 +131,17 @@
 
   vars:
     priv_key: /root/.ssh/id_{{ ssh.root_key.algo }}
+
+- name: Create private directory
+  file:
+    path: "{{ private_dir }}"
+    state: directory
+
+- name: Install private files
+  template:
+    src: "{{ item }}"
+    dest: "{{ private_dir }}"
+  with_fileglob: "templates/private/*"
 
 - block:
   - name: Install kernel EFI post-install hook

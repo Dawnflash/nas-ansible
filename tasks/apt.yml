@@ -35,12 +35,20 @@
     - lm-sensors
     - sqlite3
     - chrony
+    - python3-yaml # netdata python modules
+    - mlocate
+
+- name: Install packages without recommendations
+  apt:
+    install_recommends: no
+    name:
+      - prometheus
 
 - block:
   - name: Pull armored APT GPG keys
     get_url:
       url: "{{ item.value.gpg }}"
-      dest: "/etc/apt/{{ item.key }}.armor.gpg"
+      dest: /etc/apt/{{ item.key }}.armor.gpg
       force: yes
     loop: "{{ apt_gpg_keys.armor | dict2items }}"
     register: apt_gpg_keys_armor_reg
@@ -71,8 +79,6 @@
     update_cache: yes
     name:
       - docker-ce
-      - influxdb2
-      - telegraf
       - netdata
 
 - name: Perform safe upgrade

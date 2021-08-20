@@ -38,13 +38,6 @@
     dest: "{{ ssd_storage.root }}/docker/{{ item }}/docker-compose.yml"
   loop: "{{ docker.stacks }}"
 
-- name: Add unprivileged user to Docker group
-  user:
-    name: "{{ unprivileged_user.name }}"
-    groups:
-      - docker
-    append: yes
-
 - name: Reload Docker
   systemd:
     name: docker

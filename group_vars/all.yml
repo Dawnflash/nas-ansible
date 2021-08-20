@@ -24,10 +24,12 @@ network:
   netplan: uplink.yaml
 
 zpool_name: Master
+private_dir: /root/.private
 ssd_storage:
   root: /ssd-data
-  root_dirs:
-    - private
+  # <root>/<dir> owned by root:root
+  root_dirs: []
+  # <root>/<dir> owned by unprivileged user (used for docker containers)
   unprivileged_dirs:
     - bitwarden
     - grafana
@@ -127,8 +129,8 @@ nginx:
       port: 8080
     nzbget:
       port: 6789
-    influxdb:
-      port: 8086
+    prometheus:
+      port: 9090
     grafana:
       port: 3000
     netdata:
@@ -150,19 +152,19 @@ apt_gpg_keys:
     docker:
       gpg: https://download.docker.com/linux/debian/gpg
       repo: https://download.docker.com/linux/debian {{ debian_version }} stable
-    influxdb:
-      gpg: https://repos.influxdata.com/influxdb.key
-      repo: https://repos.influxdata.com/debian {{ debian_version }} stable
     netdata:
       gpg: https://packagecloud.io/netdata/netdata-edge/gpgkey
       repo: https://packagecloud.io/netdata/netdata-edge/debian {{ debian_version }} main
   binary: {}
 
-influxdb:
-  primary_org: cattos
-  primary_bucket:
-    name: main
-    retention: 0
+netdata:
+  frequency: 2 # collect every N seconds
+  ram_cache_size: 64 # MB
+  disk_cache_size: 8192 # MB
+
+prometheus:
+  frequency: 10s
+  storage_path: "{{ ssd_storage.root }}/prometheus/metrics2"
 
 email:
   from: robot
