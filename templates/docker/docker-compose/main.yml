@@ -241,6 +241,19 @@ services:
       media:
         ipv4_address: 172.20.0.13
         ipv6_address: fd14::d
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    user: "{{ unprivileged_user_reg.uid }}:{{ unprivileged_user_reg.group }}"
+    volumes:
+      - "{{ ssd_storage.root }}/grafana:/var/lib/grafana"
+    ports:
+      - 3000:3000
+    networks:
+      media:
+        ipv4_address: 172.20.0.14
+        ipv6_address: fd14::e
 
 networks:
   media:

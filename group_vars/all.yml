@@ -30,6 +30,7 @@ ssd_storage:
     - private
   unprivileged_dirs:
     - bitwarden
+    - grafana
 
 docker:
   ipv6_cidr: "2a02:8308:305:7f00:1::/80"
@@ -48,6 +49,8 @@ ssh:
 # ---- bertvv.samba ------
 samba_apple_extensions: yes
 samba_log: systemd
+# this breaks share root browsing
+samba_mitigate_cve_2017_7494: no
 samba_shares_root: /{{ zpool_name }}
 samba_users:
   - name: "{{ unprivileged_user.name }}"
@@ -57,6 +60,10 @@ _share_defaults: &share_defaults
   owner: "{{ unprivileged_user.name }}"
   group: "{{ unprivileged_user.group }}"
   directory_mode: "0755"
+  force_directory_mode: "0755"
+  create_mode: "0644"
+  force_create_mode: "0644"
+  browseable: yes
 
 samba_shares:
   - name: Backup
@@ -120,8 +127,12 @@ nginx:
       port: 8080
     nzbget:
       port: 6789
-    stats:
+    influxdb:
       port: 8086
+    grafana:
+      port: 3000
+    netdata:
+      port: 19999
     bitwarden:
       port: 12004
       locations:
@@ -142,6 +153,9 @@ apt_gpg_keys:
     influxdb:
       gpg: https://repos.influxdata.com/influxdb.key
       repo: https://repos.influxdata.com/debian {{ debian_version }} stable
+    netdata:
+      gpg: https://packagecloud.io/netdata/netdata-edge/gpgkey
+      repo: https://packagecloud.io/netdata/netdata-edge/debian {{ debian_version }} main
   binary: {}
 
 influxdb:

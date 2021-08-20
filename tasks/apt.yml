@@ -73,6 +73,7 @@
       - docker-ce
       - influxdb2
       - telegraf
+      - netdata
 
 - name: Perform safe upgrade
   apt:

@@ -45,3 +45,22 @@
     name: telegraf
     enabled: yes
     state: started
+
+- name: Add Netdata user to Docker group
+  user:
+    name: netdata
+    groups:
+      - docker
+    append: yes
+
+- name: Configure Netdata
+  copy:
+    src: files/netdata/netdata.conf
+    dest: /etc/netdata
+  register: netdata_conf_reg
+
+- name: Restart Netdata
+  systemd:
+    name: netdata
+    state: restarted
+  when: netdata_conf_reg.changed
