@@ -47,3 +47,5 @@
 - name: Upgrade docker stacks
   command: /root/bin/docker_upgrade.sh
   when: manage_containers
+  register: docker_upgrade_script_reg
+  changed_when: '"Total reclaimed space: 0B" not in docker_upgrade_script_reg.stdout'

@@ -75,6 +75,8 @@ samba_shares:
   - name: Random
     <<: *share_defaults
 
+homepage:
+  title: NAS server of Dawn and 🐈
 nginx:
   paths:
     html: /var/www/nas

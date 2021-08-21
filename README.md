@@ -2,7 +2,13 @@
 
 Based on Debian.
 
-Uses `ansible-galaxy` resources, run `make deps` to pull them before provisioning anything.
+## Requirements
+
+- Python 3 and pip3
+
+⚠️ Run `make deps` to pull all other dependencies before provisioning anything (check the Makefile).
+
+ℹ️ Get `ansible-lint` via pip if you want some linting.
 
 ## Testing
 

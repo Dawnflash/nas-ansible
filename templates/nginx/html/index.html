@@ -1,19 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="NAS server default page"/>
     <title>NAS server</title>
     <link rel="icon" href="/favicon.ico" sizes="192x192" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <style>
+      a {
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
-    <h1>NAS server of Dawn and Cat</h1>
+    <h1 class="text-center">{{ homepage.title }}</h1>
 
-    <h2>Available services:</h2>
-    <ul>
+    <div class="container">
+      <div class="row text-center bg-primary text-white">
+        <div class="col">
+          Services
+        </div>
+      </div>
+      <div class="row bg-light text-center">
 {% for subdom in nginx.proxy.keys() %}
-      <li><a href="https://{{ subdom }}.{{ hostname }}">{{ subdom }}</a></li>
+        <div class="col-sm-3"><a href="https://{{ subdom }}.{{ hostname }}">{{ subdom | capitalize }}</a></div>
 {% endfor %}
-    </ul>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
   </body>
 </html>

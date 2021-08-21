@@ -1,6 +1,5 @@
 - name: NAS playbook
   hosts: all
-  become: yes
 
   tasks:
     - import_tasks: tasks/apt.yml
