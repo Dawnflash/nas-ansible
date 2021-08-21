@@ -25,5 +25,11 @@ server {
   ssl_certificate_key {{ nginx.ssl_key }};
   ssl_certificate {{ nginx.ssl_cert }};
 
+  # HSTS
+  add_header Strict-Transport-Security "max-age=31536000";
+  # OCSP stapling
+  ssl_stapling on;
+  ssl_stapling_verify on;
+
   root {{ nginx.paths.html }};
 }
