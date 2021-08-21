@@ -37,31 +37,31 @@
   with_fileglob: "templates/nginx/html/*"
 
 - block:
-  - name: Install static nginx configuration
+  - name: Configure Nginx
+    template:
+      src: nginx/conf/nginx.conf
+      dest: /etc/nginx
+    register: nginx_conf
+
+  - name: Configure Nginx htpasswd files
+    template:
+      src: "nginx/conf/template.htpasswd"
+      dest: /etc/nginx/{{ item.key }}.htpasswd
+    loop: "{{ nginx.basic_auth | dict2items }}"
+
+  - name: Install nginx sites
     template:
       src: "{{ item }}"
       dest: "{{ avail_dir }}"
-    with_fileglob: "templates/nginx/conf/static/*"
-    register: nginx_conf_static
+    with_fileglob: "templates/nginx/sites/*"
+    register: nginx_sites
 
-  - name: Enable static nginx configuration
+  - name: Enable nginx sites
     file:
       src: "{{ avail_dir }}/{{ item | basename }}"
       dest: "{{ enabl_dir }}/{{ item | basename }}"
       state: link
-    with_fileglob: "templates/nginx/conf/static/*"
-
-  - name: Install proxy nginx configuration
-    template:
-      src: nginx/conf/proxy.conf
-      dest: "{{ avail_dir }}/proxy"
-    register: nginx_conf_proxy
-
-  - name: Enable proxy nginx configuration
-    file:
-      src: "{{ avail_dir }}/proxy"
-      dest: "{{ enabl_dir }}/proxy"
-      state: link
+    with_fileglob: "templates/nginx/sites/*"
 
   vars:
     avail_dir: /etc/nginx/sites-available
@@ -71,4 +71,4 @@
   systemd:
     name: nginx
     state: reloaded
-  when: nginx_conf_static.changed or nginx_conf_proxy.changed
+  when: nginx_conf.changed or nginx_sites.changed

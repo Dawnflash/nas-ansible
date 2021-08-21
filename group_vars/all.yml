@@ -80,6 +80,10 @@ homepage:
 nginx:
   paths:
     html: /var/www/nas
+  basic_auth:
+    # <realm>.htpasswd | users need keys: name, password, salt
+    common:
+      - unprivileged_user # this is a top-level variable name
   ssl_key: /etc/letsencrypt/live/{{ hostname }}/privkey.pem
   ssl_cert: /etc/letsencrypt/live/{{ hostname }}/fullchain.pem
   proxy:
@@ -133,10 +137,12 @@ nginx:
       port: 6789
     prometheus:
       port: 9090
+      basic_auth: common
     grafana:
       port: 3000
     netdata:
       port: 19999
+      basic_auth: common
     bitwarden:
       port: 12004
       locations:

@@ -150,8 +150,7 @@ services:
       VIRTUAL_HOST: pihole.{{ hostname }}
       ServerIP: {{ network.ipv4 }}
       ServerIPv6: {{ network.ipv6 }}
-      DNS1: 1.1.1.1
-      DNS2: 8.8.8.8
+      PIHOLE_DNS_: 1.1.1.1;8.8.8.8
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     volumes:
