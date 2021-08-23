@@ -86,6 +86,8 @@ nginx:
       - unprivileged_user # this is a top-level variable name
   ssl_key: /etc/letsencrypt/live/{{ hostname }}/privkey.pem
   ssl_cert: /etc/letsencrypt/live/{{ hostname }}/fullchain.pem
+  tls_protocols: TLSv1.2 TLSv1.3
+  tls_ciphers: ECDH+AESGCM:CHACHA20
   proxy:
     plex:
       port: 32400

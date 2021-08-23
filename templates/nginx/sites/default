@@ -3,6 +3,7 @@ server {
   listen [::]:80 default_server;
 
   location /stub_status {
+    access_log off;
     stub_status;
     allow 127.0.0.1;
     allow ::1;
@@ -10,6 +11,7 @@ server {
   }
 
   location /health {
+    access_log off;
     add_header "X-Cat" "🐈";
     return 204;
   }
@@ -27,6 +29,8 @@ server {
 
   # HSTS
   add_header Strict-Transport-Security "max-age=31536000";
+  # Frame deny
+  add_header X-Frame-Options DENY;
   # OCSP stapling
   ssl_stapling on;
   ssl_stapling_verify on;
