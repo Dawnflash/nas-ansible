@@ -37,6 +37,7 @@
     - chrony
     - python3-yaml # netdata python modules
     - mlocate
+    - tree
 
 - name: Install packages without recommendations
   apt:

@@ -29,7 +29,7 @@ services:
       - "{{ ssd_storage.root }}/deluge:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
-      - 8112:8112
+      - 127.0.0.1:8112:8112
     networks:
       media:
         ipv4_address: 172.20.0.2
@@ -46,7 +46,7 @@ services:
       - "{{ ssd_storage.root }}/tautulli:/config"
       - "{{ ssd_storage.root }}/plex/Library/Application Support/Plex Media Server/Logs:/logs"
     ports:
-     - 8181:8181
+     - 127.0.0.1:8181:8181
     networks:
       media:
         ipv4_address: 172.20.0.3
@@ -64,7 +64,7 @@ services:
       - /Master/Media/Movies:/movies
       - /Master/Media/Series:/tv
     ports:
-      - 6767:6767
+      - 127.0.0.1:6767:6767
     networks:
       media:
         ipv4_address: 172.20.0.4
@@ -82,7 +82,7 @@ services:
       - /Master/Media/Movies:/movies
       - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
-      - 7878:7878
+      - 127.0.0.1:7878:7878
     networks:
       media:
         ipv4_address: 172.20.0.5
@@ -100,7 +100,7 @@ services:
       - /Master/Media/Series:/tv
       - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
-      - 8989:8989
+      - 127.0.0.1:8989:8989
     networks:
       media:
         ipv4_address: 172.20.0.6
@@ -118,7 +118,7 @@ services:
       - /Master/Media/Music:/music
       - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
-      - 8686:8686
+      - 127.0.0.1:8686:8686
     networks:
       media:
         ipv4_address: 172.20.0.7
@@ -136,11 +136,27 @@ services:
       - "{{ ssd_storage.root }}/downloads:/downloads"
       - /Master/Media/Books:/books
     ports:
-      - 8787:8787
+      - 127.0.0.1:8787:8787
     networks:
       media:
         ipv4_address: 172.20.0.8
         ipv6_address: fd14::8
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
+      - TZ={{ timezone }}
+    volumes:
+      - "{{ ssd_storage.root }}/prowlarr:/config"
+    ports:
+      - 127.0.0.1:9696:9696
+    networks:
+      media:
+        ipv4_address: 172.20.0.9
+        ipv6_address: fd14::9
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -157,15 +173,13 @@ services:
       - "{{ ssd_storage.root }}/dns/pihole:/etc/pihole"
       - "{{ ssd_storage.root }}/dns/dnsmasq:/etc/dnsmasq.d"
     ports:
-      - 53:53/tcp
+      - 53:53
       - 53:53/udp
-      - 67:67/udp
-      - 8080:80/tcp
-      - 8081:443/tcp
+      - 127.0.0.1:8080:80
     networks:
       media:
-        ipv4_address: 172.20.0.9
-        ipv6_address: fd14::9
+        ipv4_address: 172.20.0.10
+        ipv6_address: fd14::a
   nzbget:
     image: linuxserver/nzbget
     container_name: nzbget
@@ -178,11 +192,11 @@ services:
       - "{{ ssd_storage.root }}/nzbget:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
     ports:
-      - 6789:6789
+      - 127.0.0.1:6789:6789
     networks:
       media:
-        ipv4_address: 172.20.0.10
-        ipv6_address: fd14::a
+        ipv4_address: 172.20.0.11
+        ipv6_address: fd14::b
   ombi:
     image: linuxserver/ombi
     container_name: ombi
@@ -194,11 +208,11 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/ombi:/config"
     ports:
-      - 3579:3579
+      - 127.0.0.1:3579:3579
     networks:
       media:
-        ipv4_address: 172.20.0.11
-        ipv6_address: fd14::b
+        ipv4_address: 172.20.0.12
+        ipv6_address: fd14::c
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -218,24 +232,8 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/bitwarden:/data"
     ports:
-      - 12004:12004
-      - 12005:12005
-    networks:
-      media:
-        ipv4_address: 172.20.0.12
-        ipv6_address: fd14::c
-  prowlarr:
-    image: linuxserver/prowlarr:develop
-    container_name: prowlarr
-    restart: unless-stopped
-    environment:
-      - PUID={{ unprivileged_user_reg.uid }}
-      - PGID={{ unprivileged_user_reg.group }}
-      - TZ={{ timezone }}
-    volumes:
-      - "{{ ssd_storage.root }}/prowlarr:/config"
-    ports:
-      - 9696:9696
+      - 127.0.0.1:12004:12004
+      - 127.0.0.1:12005:12005
     networks:
       media:
         ipv4_address: 172.20.0.13
@@ -248,7 +246,7 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/grafana:/var/lib/grafana"
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     networks:
       media:
         ipv4_address: 172.20.0.14
