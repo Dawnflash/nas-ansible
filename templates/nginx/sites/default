@@ -31,9 +31,6 @@ server {
   add_header Strict-Transport-Security "max-age=31536000";
   # Frame deny
   add_header X-Frame-Options DENY;
-  # OCSP stapling
-  ssl_stapling on;
-  ssl_stapling_verify on;
 
   root {{ nginx.paths.html }};
 }
