@@ -50,7 +50,6 @@ ssh:
 
 # ---- bertvv.samba ------
 samba_apple_extensions: yes
-samba_log: systemd
 # this breaks share root browsing
 samba_mitigate_cve_2017_7494: no
 samba_shares_root: /{{ zpool_name }}
@@ -66,6 +65,7 @@ _share_defaults: &share_defaults
   create_mode: "0644"
   force_create_mode: "0644"
   browseable: yes
+  writable: yes
 
 samba_shares:
   - name: Backup
