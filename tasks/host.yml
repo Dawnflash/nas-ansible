@@ -11,18 +11,15 @@
     src: "{{ item }}"
     dest: /etc/default
   with_fileglob: "templates/default/*"
-  register: etc_defaults
+  notify:
+    - Changed /etc/defaults
 
-- block:
-  - name: Set NTP servers
-    template:
-      src: chrony_sources.j2
-      dest: /etc/chrony/sources.d/nas.sources
-    register: chrony_src
-
-  - name: Reload chrony sources
-    command: chronyc reload sources
-    when: chrony_src.changed
+- name: Set NTP servers
+  template:
+    src: chrony_sources.j2
+    dest: /etc/chrony/sources.d/nas.sources
+  notify:
+    - Reload chrony sources
 
 - block:
   - name: Check legacy network conf
@@ -73,13 +70,8 @@
     src: "{{ item }}"
     dest: /etc/ssh
   with_fileglob: "templates/ssh/host/*"
-  register: ssh_config
-
-- name: Reload SSH
-  systemd:
-    name: ssh
-    state: reloaded
-  when: ssh_config.changed
+  notify:
+    - Reload SSH
 
 - name: Create root SSH directory
   file:
@@ -143,16 +135,11 @@
     dest: "{{ private_dir }}"
   with_fileglob: "templates/private/*"
 
-- block:
-  - name: Install kernel EFI post-install hook
-    copy:
-      src: files/systemdboot/zz_copy_efi
-      dest: /etc/kernel/postinst.d
-      mode: 0755
-    register: efi_postinst_hook
-
-  - name: Run kernel EFI post-install hook
-    shell: /etc/kernel/postinst.d/zz_copy_efi "$(uname -r)"
-    when: efi_postinst_hook.changed
-
+- name: Install kernel EFI post-install hook
+  copy:
+    src: files/systemdboot/zz_copy_efi
+    dest: /etc/kernel/postinst.d
+    mode: 0755
   when: use_systemdboot
+  notify:
+    - Run kernel EFI post-install hook

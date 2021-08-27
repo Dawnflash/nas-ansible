@@ -1,0 +1,47 @@
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: Reload SSH
+  systemd:
+    name: ssh
+    state: reloaded
+
+- name: Reload docker
+  systemd:
+    name: docker
+    state: reloaded
+
+- name: Restart postfix
+  systemd:
+    name: postfix
+    state: restarted
+
+- name: Restart netdata
+  systemd:
+    name: netdata
+    state: restarted
+
+- name: Restart prometheus
+  systemd:
+    name: prometheus
+    state: restarted
+  listen: Changed /etc/defaults
+
+- name: Restart custom systemd units
+  systemd:
+    name: "{{ item | basename }}"
+    enabled: yes
+    state: restarted
+  with_fileglob: "templates/systemd/*.service"
+
+- name: Run kernel EFI post-install hook
+  shell: /etc/kernel/postinst.d/zz_copy_efi "$(uname -r)"
+
+- name: Reload chrony sources
+  command: chronyc reload sources
+
+- name: Upgrade docker stacks
+  command: /root/bin/docker_upgrade.sh
+  when: manage_containers

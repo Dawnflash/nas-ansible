@@ -11,3 +11,6 @@
     - import_tasks: tasks/docker.yml
     - import_tasks: tasks/web.yml
     - import_tasks: tasks/stats.yml
+
+  handlers:
+    - import_tasks: handlers/main.yml

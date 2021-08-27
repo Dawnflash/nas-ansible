@@ -41,7 +41,8 @@
     template:
       src: nginx/conf/nginx.conf
       dest: /etc/nginx
-    register: nginx_conf
+    notify:
+      - Reload nginx
 
   - name: Configure Nginx htpasswd files
     template:
@@ -54,7 +55,8 @@
       src: "{{ item }}"
       dest: "{{ avail_dir }}"
     with_fileglob: "templates/nginx/sites/*"
-    register: nginx_sites
+    notify:
+      - Reload nginx
 
   - name: Enable nginx sites
     file:
@@ -66,9 +68,3 @@
   vars:
     avail_dir: /etc/nginx/sites-available
     enabl_dir: /etc/nginx/sites-enabled
-
-- name: Reload nginx
-  systemd:
-    name: nginx
-    state: reloaded
-  when: nginx_conf.changed or nginx_sites.changed

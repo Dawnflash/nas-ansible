@@ -10,27 +10,24 @@
     src: "{{ item }}"
     dest: /etc/netdata
   with_fileglob: "templates/netdata/*"
-  register: netdata_conf_reg
+  notify:
+    - Restart netdata
 
 - name: Configure Netdata python modules
   template:
     src: "{{ item }}"
     dest: /etc/netdata/python.d
   with_fileglob: "templates/netdata/python.d/*"
-  register: netdata_python_conf_reg
-
-- name: Restart Netdata
-  systemd:
-    name: netdata
-    state: restarted
-  when: netdata_conf_reg.changed or netdata_python_conf_reg.changed
+  notify:
+    - Restart netdata
 
 - name: Configure Prometheus
   template:
     src: "{{ item }}"
     dest: /etc/prometheus
   with_fileglob: "templates/prometheus/*"
-  register: prometheus_conf_reg
+  notify:
+    - Restart prometheus
 
 - name: Create Prometheus TSDB directory
   file:
@@ -38,10 +35,5 @@
     owner: prometheus
     group: prometheus
     state: directory
-  register: prometheus_tsdb_reg
-
-- name: Restart Prometheus
-  systemd:
-    name: prometheus
-    state: restarted
-  when: etc_defaults.changed or prometheus_conf_reg.changed or prometheus_tsdb_reg.changed
+  notify:
+    - Restart prometheus

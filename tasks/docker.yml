@@ -3,7 +3,8 @@
   template:
     src: docker/daemon.json
     dest: /etc/docker
-  register: daemon_json
+  notify:
+    - Reload docker
 
 - name: Start Docker
   systemd:
@@ -37,15 +38,5 @@
     src: docker/docker-compose/{{ item }}.yml
     dest: "{{ ssd_storage.root }}/docker/{{ item }}/docker-compose.yml"
   loop: "{{ docker.stacks }}"
-
-- name: Reload Docker
-  systemd:
-    name: docker
-    state: reloaded
-  when: daemon_json.changed
-
-- name: Upgrade docker stacks
-  command: /root/bin/docker_upgrade.sh
-  when: manage_containers
-  register: docker_upgrade_script_reg
-  changed_when: '"Total reclaimed space: 0B" not in docker_upgrade_script_reg.stdout'
+  notify:
+    - Upgrade docker stacks
