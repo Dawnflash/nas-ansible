@@ -1,3 +1,7 @@
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
 - name: Reload nginx
   systemd:
     name: nginx
@@ -29,12 +33,12 @@
     state: restarted
   listen: Changed /etc/defaults
 
-- name: Restart custom systemd units
+- name: Restart custom systemd services
   systemd:
     name: "{{ item | basename }}"
     enabled: yes
     state: restarted
-  with_fileglob: "templates/systemd/*.service"
+  loop: "{{ systemd_services_reg.results | selectattr('changed', 'equalto', True) | map(attribute='item') | list }}"
 
 - name: Run kernel EFI post-install hook
   shell: /etc/kernel/postinst.d/zz_copy_efi "$(uname -r)"

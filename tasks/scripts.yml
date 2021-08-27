@@ -48,5 +48,7 @@
     src: "{{ item }}"
     dest: /etc/systemd/system
   with_fileglob: "templates/systemd/*.service"
+  register: systemd_services_reg
   notify:
-    - Restart custom systemd units
+    - Reload systemd
+    - Restart custom systemd services
