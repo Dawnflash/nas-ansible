@@ -1,4 +1,3 @@
-debian_version: bullseye
 debian_repo_base: http://ftp.sh.cvut.cz/debian/
 hostname: nas.dawnflash.cz
 timezone: Europe/Prague
@@ -161,10 +160,10 @@ apt_gpg_keys:
   armor:
     docker:
       gpg: https://download.docker.com/linux/debian/gpg
-      repo: https://download.docker.com/linux/debian {{ debian_version }} stable
+      repo: https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     netdata:
       gpg: https://packagecloud.io/netdata/netdata-edge/gpgkey
-      repo: https://packagecloud.io/netdata/netdata-edge/debian {{ debian_version }} main
+      repo: https://packagecloud.io/netdata/netdata-edge/debian {{ ansible_distribution_release }} main
   binary: {}
 
 netdata:

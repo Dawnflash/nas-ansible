@@ -1,6 +1,11 @@
+- name: Distribution check
+  fail:
+    msg: "Debian is the only supported distribution, you are running {{ ansible_distribution }}!"
+  when: ansible_distribution != "Debian"
+
 - name: Add primary repository
   apt_repository:
-    repo: deb {{ debian_repo_base }} {{ debian_version }} main contrib
+    repo: deb {{ debian_repo_base }} {{ ansible_distribution_release }} main contrib
     filename: main
 
 - name: Install packages
