@@ -179,8 +179,9 @@ prometheus:
 email:
   from: robot
   recipients:
-    dawn: adamzahumensky@gmail.com
-    meow: volek@adamv.cz
+    main: adamzahumensky@gmail.com
+    extra:
+      - volek@adamv.cz
   relay:
     host: mail.e-kom.cz:465
     user: zahumensky@e-kom.cz

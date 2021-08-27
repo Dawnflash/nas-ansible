@@ -1,3 +1,3 @@
-root {{ email.recipients.dawn }}
-admin {{ email.recipients.dawn }}
-@{{ hostname }} {{ email.recipients.dawn }}
+root {{ email.recipients.main }}
+admin {{ email.recipients.main }}
+@{{ hostname }} {{ email.recipients.main }}

@@ -8,7 +8,7 @@
     command: |
       certbot certonly {{ certbot_flags }} -n \
       -d {{ hostname }} -d "*.{{ hostname }}" \
-      --agree-tos --email {{ email.recipients.dawn }} \
+      --agree-tos --email {{ email.recipients.main }} \
       --post-hook /root/bin/cert_postrenew.sh \
       --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini
     when: not le_conf.stat.exists
