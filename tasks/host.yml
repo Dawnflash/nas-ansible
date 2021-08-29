@@ -42,9 +42,14 @@
 
   - name: Install netplan conf
     template:
-      src: netplan/{{ network.netplan }}
+      src: network/{{ network.netplan }}
       dest: /etc/netplan
     register: netplan_conf
+
+  - name: Configure resolv.conf
+    template:
+      src: network/resolv.conf
+      dest: /etc
 
   - name: Enable networkd
     systemd:

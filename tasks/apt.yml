@@ -43,6 +43,7 @@
     - python3-yaml # netdata python modules
     - mlocate
     - tree
+    - dnsutils
 
 - name: Install packages without recommendations
   apt:
