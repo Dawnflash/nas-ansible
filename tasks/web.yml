@@ -49,6 +49,8 @@
       src: "nginx/conf/template.htpasswd"
       dest: /etc/nginx/{{ item.key }}.htpasswd
     loop: "{{ nginx.basic_auth | dict2items }}"
+    notify:
+      - Reload nginx
 
   - name: Install nginx sites
     template:
@@ -64,7 +66,10 @@
       dest: "{{ enabl_dir }}/{{ item | basename }}"
       state: link
     with_fileglob: "templates/nginx/sites/*"
+    notify:
+      - Reload nginx
 
+  # Ansible 11: put "notify: [Reload nginx]" here instead
   vars:
     avail_dir: /etc/nginx/sites-available
     enabl_dir: /etc/nginx/sites-enabled
