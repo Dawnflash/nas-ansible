@@ -1,6 +1,6 @@
 all:
   children:
-    nas:
+    NAS:
       hosts:
         ansible-nas-test:
           ansible_host: 172.10.0.2

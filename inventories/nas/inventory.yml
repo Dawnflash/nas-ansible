@@ -1,7 +1,8 @@
 all:
   children:
-    nas:
+    NAS:
       hosts:
+        # These should match your SSH config definitions
+        # Use the root user
         nas.local:
-          ansible_host: 192.168.0.115
-        nas.dawnflash.cz:
+        nas:

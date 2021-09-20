@@ -38,4 +38,4 @@ deploy-local:
 	ansible-playbook -l nas.local -i inventories/nas/inventory.yml nas.yml
 
 deploy:
-	ansible-playbook -l nas.dawnflash.cz -i inventories/nas/inventory.yml nas.yml
+	ansible-playbook -l nas -i inventories/nas/inventory.yml nas.yml
