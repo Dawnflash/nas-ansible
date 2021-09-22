@@ -29,8 +29,8 @@ server {
 
   # HSTS
   add_header Strict-Transport-Security "max-age=31536000";
-  # Frame deny
-  add_header X-Frame-Options DENY;
+  # Frame restrict
+  add_header X-Frame-Options SAMEORIGIN;
 
   root {{ nginx.paths.html }};
 }
