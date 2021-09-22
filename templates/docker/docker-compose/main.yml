@@ -17,14 +17,14 @@ services:
       - /Master/Media:/Media
     network_mode: host
   deluge:
-    image: linuxserver/deluge
+    image: binhex/arch-deluge:2.0.3-1-02
     container_name: deluge
     restart: unless-stopped
     environment:
       - PUID={{ unprivileged_user_reg.uid }}
       - PGID={{ unprivileged_user_reg.group }}
-      - TZ={{ timezone }}
-      - DELUGE_LOGLEVEL=error #optional
+      - DELUGE_DAEMON_LOG_LEVEL=error
+      - DELUGE_WEB_LOG_LEVEL=error
     volumes:
       - "{{ ssd_storage.root }}/deluge:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
