@@ -6,8 +6,8 @@ set -e
 cd '{{ ssd_storage.root }}/docker/{{ stack }}'
 echo Upgrading stack {{ stack }}
 
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 
 {% endfor %}
 docker image prune -f

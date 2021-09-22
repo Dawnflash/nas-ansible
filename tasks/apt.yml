@@ -41,9 +41,11 @@
     - sqlite3
     - chrony
     - python3-yaml # netdata python modules
+    - python3-pip # among others, for docker-compose
     - mlocate
     - tree
     - dnsutils
+    - ncdu
 
 - name: Install packages without recommendations
   apt:

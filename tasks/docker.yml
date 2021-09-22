@@ -12,20 +12,9 @@
     enabled: yes
     state: started
 
-- block:
-  - name: Create Docker plugin directory
-    file:
-      path: "{{ plugin_dir }}"
-      state: directory
-
-  - name: Install docker-compose plugin
-    get_url:
-      url: https://github.com/docker/compose-cli/releases/download/{{ docker.compose_version }}/docker-compose-linux-amd64
-      dest: "{{ plugin_dir }}/docker-compose"
-      mode: 0755
-
-  vars:
-    plugin_dir: /root/.docker/cli-plugins
+- name: Install Docker-compose
+  pip:
+    name: docker-compose
 
 - name: Create compose stack directories
   file:

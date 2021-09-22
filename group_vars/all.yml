@@ -41,7 +41,6 @@ docker:
   ipv6_cidr: "2a02:8308:305:7f00:1::/80"
   stacks:
     - main
-  compose_version: v2.0.0-rc.1
 
 ssh:
   pubkeys:
