@@ -3,7 +3,6 @@
 CF_ZONE={{ cloudflare.zone }}
 CF_TOKEN={{ cloudflare.token }}
 
-DKR_CONFIG=/etc/docker/daemon.json
 INTF={{ network.uplink }}
 SFX="::abcd"
 PLAN=/etc/netplan/{{ network.netplan }}
@@ -13,12 +12,6 @@ tg_notify () {
   echo Sending TG notification
   MSG="*\[NAS Networking\]* IPv6 changed: $OLD_ADDR \-\> $NEW_ADDR\nPlease update Ansible configuration\."
   telegram-send $MSG
-}
-
-dkr_update () {
-  echo Updating Docker config
-  sed -i "s/$OLD_PFX/$PFX/" $DKR_CONFIG
-  systemctl restart docker
 }
 
 cf_update() {
@@ -57,7 +50,6 @@ while true; do
   sed -i "s/$OLD_ADDR/$NEW_ADDR/" $PLAN
   netplan apply
   sleep 60
-  dkr_update
   cf_update
   tg_notify
 

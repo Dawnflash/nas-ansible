@@ -28,12 +28,7 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/deluge:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
-    ports:
-      - 127.0.0.1:8112:8112
-    networks:
-      media:
-        ipv4_address: 172.20.0.2
-        ipv6_address: fd14::2
+    network_mode: host # to enable active P2P connections and avoid IPv6 NAT
   tautulli:
     image: tautulli/tautulli
     container_name: tautulli
@@ -49,8 +44,6 @@ services:
      - 127.0.0.1:8181:8181
     networks:
       media:
-        ipv4_address: 172.20.0.3
-        ipv6_address: fd14::3
   bazarr:
     image: linuxserver/bazarr
     container_name: bazarr
@@ -67,8 +60,6 @@ services:
       - 127.0.0.1:6767:6767
     networks:
       media:
-        ipv4_address: 172.20.0.4
-        ipv6_address: fd14::4
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -85,8 +76,6 @@ services:
       - 127.0.0.1:7878:7878
     networks:
       media:
-        ipv4_address: 172.20.0.5
-        ipv6_address: fd14::5
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
@@ -103,8 +92,6 @@ services:
       - 127.0.0.1:8989:8989
     networks:
       media:
-        ipv4_address: 172.20.0.6
-        ipv6_address: fd14::6
   lidarr:
     image: linuxserver/lidarr
     container_name: lidarr
@@ -121,8 +108,6 @@ services:
       - 127.0.0.1:8686:8686
     networks:
       media:
-        ipv4_address: 172.20.0.7
-        ipv6_address: fd14::7
   readarr:
     image: linuxserver/readarr:nightly
     container_name: readarr
@@ -139,8 +124,6 @@ services:
       - 127.0.0.1:8787:8787
     networks:
       media:
-        ipv4_address: 172.20.0.8
-        ipv6_address: fd14::8
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
@@ -155,8 +138,6 @@ services:
       - 127.0.0.1:9696:9696
     networks:
       media:
-        ipv4_address: 172.20.0.9
-        ipv6_address: fd14::9
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -178,8 +159,6 @@ services:
       - 127.0.0.1:8080:80
     networks:
       media:
-        ipv4_address: 172.20.0.10
-        ipv6_address: fd14::a
   nzbget:
     image: linuxserver/nzbget
     container_name: nzbget
@@ -195,8 +174,6 @@ services:
       - 127.0.0.1:6789:6789
     networks:
       media:
-        ipv4_address: 172.20.0.11
-        ipv6_address: fd14::b
   ombi:
     image: linuxserver/ombi
     container_name: ombi
@@ -211,8 +188,6 @@ services:
       - 127.0.0.1:3579:3579
     networks:
       media:
-        ipv4_address: 172.20.0.12
-        ipv6_address: fd14::c
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -236,8 +211,6 @@ services:
       - 127.0.0.1:12005:12005
     networks:
       media:
-        ipv4_address: 172.20.0.13
-        ipv6_address: fd14::d
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -249,8 +222,6 @@ services:
       - 127.0.0.1:3000:3000
     networks:
       media:
-        ipv4_address: 172.20.0.14
-        ipv6_address: fd14::e
 
 networks:
   media:

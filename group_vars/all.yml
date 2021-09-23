@@ -38,7 +38,7 @@ ssd_storage:
     - grafana
 
 docker:
-  ipv6_cidr: "2a02:8308:305:7f00:1::/80"
+  ipv6_cidr: "2001:db8:1::/64"
   stacks:
     - main
 
