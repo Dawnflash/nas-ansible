@@ -133,8 +133,8 @@ nginx:
             Connection: $http_connnection
     sonarr:
       port: 8989
-    deluge:
-      port: 8112
+    qbittorrent:
+      port: 58847
     pihole:
       port: 8080
     nzbget:

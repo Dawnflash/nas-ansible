@@ -16,17 +16,17 @@ services:
       - "{{ ssd_storage.root }}/plex:/transcode"
       - /Master/Media:/Media
     network_mode: host
-  deluge:
-    image: binhex/arch-deluge:2.0.3-1-02
-    container_name: deluge
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    container_name: qbittorrent
     restart: unless-stopped
     environment:
       - PUID={{ unprivileged_user_reg.uid }}
       - PGID={{ unprivileged_user_reg.group }}
-      - DELUGE_DAEMON_LOG_LEVEL=error
-      - DELUGE_WEB_LOG_LEVEL=error
+      - TZ={{ timezone }}
+      - WEBUI_PORT=58847
     volumes:
-      - "{{ ssd_storage.root }}/deluge:/config"
+      - "{{ ssd_storage.root }}/qbittorrent:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
     network_mode: host # to enable active P2P connections and avoid IPv6 NAT
   tautulli:
