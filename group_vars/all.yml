@@ -167,7 +167,10 @@ apt_gpg_keys:
     netdata:
       gpg: https://packagecloud.io/netdata/netdata-edge/gpgkey
       repo: https://packagecloud.io/netdata/netdata-edge/debian {{ ansible_distribution_release }} main
-  binary: {}
+  binary:
+    mkvtoolnix:
+      gpg: https://mkvtoolnix.download/gpg-pub-moritzbunkus.gpg
+      repo: https://mkvtoolnix.download/debian/ {{ ansible_distribution_release }} main
 
 netdata:
   frequency: 2 # collect every N seconds

@@ -89,6 +89,7 @@
     name:
       - docker-ce
       - netdata
+      - mkvtoolnix
 
 - name: Perform safe upgrade
   apt:
