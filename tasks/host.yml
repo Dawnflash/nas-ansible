@@ -148,3 +148,12 @@
   when: use_systemdboot
   notify:
     - Run kernel EFI post-install hook
+
+- name: Install initramfs EFI hook
+  file:
+    src: "/etc/kernel/postinst.d/zz_copy_efi"
+    dest: "/etc/initramfs-tools/hooks/zz_copy_efi"
+    state: link
+  when: use_systemdboot
+  notify:
+    - Run kernel EFI post-install hook
