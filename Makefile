@@ -1,5 +1,5 @@
-MITOGEN_VERSION=0.3.0-rc.0
-PIP_DEPS='ansible<2.11' passlib
+MITOGEN_VERSION=0.3.3
+PIP_DEPS='ansible<6' passlib
 PIP_CMD=pip3 -q --disable-pip-version-check
 
 all: deps test
