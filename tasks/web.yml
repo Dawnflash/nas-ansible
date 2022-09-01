@@ -1,28 +1,16 @@
 - block:
-  - name: Check for LE conf for {{ hostname }}
-    stat:
-      path: /etc/letsencrypt/renewal/{{ hostname }}.conf
-    register: le_conf
+    - name: Check for LE conf for {{ hostname }}
+      stat:
+        path: /etc/letsencrypt/renewal/{{ hostname }}.conf
+      register: le_conf
 
-  - name: Configure LE cert for {{ hostname }}
-    command: |
-      certbot certonly {{ certbot_flags }} -n \
-      -d {{ hostname }} -d "*.{{ hostname }}" \
-      --agree-tos --email {{ email.recipients.main }} \
-      --post-hook /root/bin/cert_postrenew.sh \
-      --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini
-    when: not le_conf.stat.exists
-    register: le_cert_reg
-
-  - name: Warn about failing hook
-    debug:
-      msg:
-        - LE post-hook failed. This is likely caused by SSH issues.
-        - Consult /var/log/letsencrypt/letsencrypt.log
-        - Rerun the hook later to ensure proxy certificates are in sync.
-    when:
-      - '"stderr" in le_cert_reg'
-      - '"Error output from post-hook command" in le_cert_reg.stderr'
+    - name: Configure LE cert for {{ hostname }}
+      command: |
+        certbot certonly {{ certbot_flags }} -n \
+        -d {{ hostname }} -d "*.{{ hostname }}" \
+        --agree-tos --email {{ email.recipients.main }} \
+        --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini
+      when: not le_conf.stat.exists
 
 - name: Create web-related directories
   file:
@@ -37,37 +25,37 @@
   with_fileglob: "templates/nginx/html/*"
 
 - block:
-  - name: Configure Nginx
-    template:
-      src: nginx/conf/nginx.conf
-      dest: /etc/nginx
-    notify:
-      - Reload nginx
+    - name: Configure Nginx
+      template:
+        src: nginx/conf/nginx.conf
+        dest: /etc/nginx
+      notify:
+        - Reload nginx
 
-  - name: Configure Nginx htpasswd files
-    template:
-      src: "nginx/conf/template.htpasswd"
-      dest: /etc/nginx/{{ item.key }}.htpasswd
-    loop: "{{ nginx.basic_auth | dict2items }}"
-    notify:
-      - Reload nginx
+    - name: Configure Nginx htpasswd files
+      template:
+        src: "nginx/conf/template.htpasswd"
+        dest: /etc/nginx/{{ item.key }}.htpasswd
+      loop: "{{ nginx.basic_auth | dict2items }}"
+      notify:
+        - Reload nginx
 
-  - name: Install nginx sites
-    template:
-      src: "{{ item }}"
-      dest: "{{ avail_dir }}"
-    with_fileglob: "templates/nginx/sites/*"
-    notify:
-      - Reload nginx
+    - name: Install nginx sites
+      template:
+        src: "{{ item }}"
+        dest: "{{ avail_dir }}"
+      with_fileglob: "templates/nginx/sites/*"
+      notify:
+        - Reload nginx
 
-  - name: Enable nginx sites
-    file:
-      src: "{{ avail_dir }}/{{ item | basename }}"
-      dest: "{{ enabl_dir }}/{{ item | basename }}"
-      state: link
-    with_fileglob: "templates/nginx/sites/*"
-    notify:
-      - Reload nginx
+    - name: Enable nginx sites
+      file:
+        src: "{{ avail_dir }}/{{ item | basename }}"
+        dest: "{{ enabl_dir }}/{{ item | basename }}"
+        state: link
+      with_fileglob: "templates/nginx/sites/*"
+      notify:
+        - Reload nginx
 
   # Ansible 11: put "notify: [Reload nginx]" here instead
   vars:
