@@ -11,7 +11,7 @@ SEL='\s[0-9a-f]*:[0-9a-f]*:[0-9a-f]*:[0-9a-f]*'
 tg_notify () {
   echo Sending TG notification
   MSG="*\[NAS Networking\]* IPv6 changed: $OLD_ADDR \-\> $NEW_ADDR\nPlease update Ansible configuration\."
-  telegram-send $MSG
+  telegram-send "$MSG"
 }
 
 cf_update() {

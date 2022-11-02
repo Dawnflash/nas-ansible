@@ -18,7 +18,7 @@ ntp_servers:
 
 network:
   ipv4: 192.168.0.115
-  ipv6: 2a02:8308:305:7f00::abcd
+  ipv6: 2001:1ae9:31b:7600::abcd
   nameservers:
     - 1.1.1.1
     - 2606:4700:4700::1111
@@ -155,7 +155,7 @@ nginx:
           port: 12005
           headers:
             Upgrade: $http_upgrade
-            Connection: "\"upgrade\""
+            Connection: '"upgrade"'
       extra:
         client_max_body_size: 128M
 
