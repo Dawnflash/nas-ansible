@@ -1,0 +1,9 @@
+[Unit]
+Description=Watchdog for public IP changes
+
+[Service]
+ExecStart=/root/bin/ip_update.sh
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

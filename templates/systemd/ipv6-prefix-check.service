@@ -1,9 +1,0 @@
-[Unit]
-Description=Watchdog for IPv6 prefix changes
-
-[Service]
-ExecStart=/root/bin/ipv6_prefix_check.sh
-Nice=10
-
-[Install]
-WantedBy=multi-user.target
