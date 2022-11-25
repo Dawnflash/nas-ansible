@@ -41,7 +41,7 @@ services:
       - "{{ ssd_storage.root }}/tautulli:/config"
       - "{{ ssd_storage.root }}/plex/Library/Application Support/Plex Media Server/Logs:/logs"
     ports:
-     - 127.0.0.1:8181:8181
+      - 127.0.0.1:8181:8181
     networks:
       media:
   bazarr:
@@ -138,27 +138,27 @@ services:
       - 127.0.0.1:9696:9696
     networks:
       media:
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    restart: unless-stopped
-    environment:
-      TZ: {{ timezone }}
-      VIRTUAL_HOST: pihole.{{ hostname }}
-      ServerIP: {{ network.ipv4 }}
-      ServerIPv6: {{ network.ipv6 }}
-      PIHOLE_DNS_: 1.1.1.1;8.8.8.8
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
-    volumes:
-      - "{{ ssd_storage.root }}/dns/pihole:/etc/pihole"
-      - "{{ ssd_storage.root }}/dns/dnsmasq:/etc/dnsmasq.d"
-    ports:
-      - 53:53
-      - 53:53/udp
-      - 127.0.0.1:8080:80
-    networks:
-      media:
+  # pihole:
+  #   container_name: pihole
+  #   image: pihole/pihole:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     TZ: {{ timezone }}
+  #     VIRTUAL_HOST: pihole.{{ hostname }}
+  #     ServerIP: {{ network.ipv4 }}
+  #     ServerIPv6: {{ network.ipv6 }}
+  #     PIHOLE_DNS_: 1.1.1.1;8.8.8.8
+  #     # WEBPASSWORD: 'set a secure password here or it will be random'
+  #   # Volumes store your data between container upgrades
+  #   volumes:
+  #     - "{{ ssd_storage.root }}/dns/pihole:/etc/pihole"
+  #     - "{{ ssd_storage.root }}/dns/dnsmasq:/etc/dnsmasq.d"
+  #   ports:
+  #     - 53:53
+  #     - 53:53/udp
+  #     - 127.0.0.1:8080:80
+  #   networks:
+  #     media:
   nzbget:
     image: linuxserver/nzbget
     container_name: nzbget
