@@ -9,7 +9,8 @@
         certbot certonly {{ certbot_flags }} -n \
         -d {{ hostname }} -d "*.{{ hostname }}" \
         --agree-tos --email {{ email.recipients.main }} \
-        --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini
+        --dns-cloudflare --dns-cloudflare-credentials {{ private_dir }}/cloudflare_dawnflash.cz.ini \
+        --deploy-hook "nginx -s reload"
       when: not le_conf.stat.exists
 
 - name: Create web-related directories
