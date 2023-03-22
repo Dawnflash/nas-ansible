@@ -134,6 +134,7 @@ nginx:
     sonarr:
       port: 8989
     qbittorrent:
+      host: 172.20.0.1
       port: 58847
     # pihole:
     #   port: 8080
