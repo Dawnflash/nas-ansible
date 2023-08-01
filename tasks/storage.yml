@@ -4,10 +4,10 @@
   changed_when: ensure_zfs.stderr != "no pools available to import"
 
 - name: Validate presence of mounted ZFS datasets
-  command: zfs list -Ho mounted
+  shell: zfs list -Ho mounted | grep yes
   register: zfs_mount_check
   changed_when: false
-  failed_when: zfs_mount_check.stdout_lines | length <= samba_shares | length or "no" in zfs_mount_check.stdout_lines
+  failed_when: zfs_mount_check.stdout_lines | length <= samba_shares | length
 
 - name: Fetch ZFS datasets
   command: zfs list -Ho name
