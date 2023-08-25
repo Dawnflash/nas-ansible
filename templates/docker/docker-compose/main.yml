@@ -235,6 +235,19 @@ services:
       - 127.0.0.1:3000:3000
     networks:
       media:
+  rarbg:
+    image: ghcr.io/mgdigital/rarbg-selfhosted:latest
+    container_name: rarbg
+    restart: unless-stopped
+    user: "{{ unprivileged_user_reg.uid }}:{{ unprivileged_user_reg.group }}"
+    environment:
+      - PATH_SQLITE_DB=/rarbg/rarbg_db.sqlite
+      - PATH_TRACKERS=/rarbg/trackers.txt
+      # - DEBUG=1
+    volumes:
+      - "/ssd-data/rarbg:/rarbg:ro"
+    networks:
+      media:
 
 networks:
   media:

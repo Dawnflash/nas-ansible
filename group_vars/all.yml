@@ -139,8 +139,6 @@ nginx:
     qbittorrent:
       host: 172.20.0.1
       port: 58847
-    # pihole:
-    #   port: 8080
     nzbget:
       port: 6789
     prometheus:
