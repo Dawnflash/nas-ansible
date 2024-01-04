@@ -160,6 +160,9 @@ nginx:
             Connection: '"upgrade"'
       extra:
         client_max_body_size: 128M
+    syncthing:
+      port: 8384
+      basic_auth: common
 
 apt_gpg_keys:
   armor:

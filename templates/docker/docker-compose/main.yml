@@ -248,6 +248,22 @@ services:
       - "/ssd-data/rarbg:/rarbg:ro"
     networks:
       media:
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    restart: unless-stopped
+    environment:
+      - PUID={{ unprivileged_user_reg.uid }}
+      - PGID={{ unprivileged_user_reg.group }}
+      - TZ={{ timezone }}
+    volumes:
+      - "{{ ssd_storage.root }}/syncthing:/config"
+      - /Master/Random/Sync:/sync/Main
+    ports:
+      - 127.0.0.1:8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
 
 networks:
   media:

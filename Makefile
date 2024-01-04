@@ -1,5 +1,5 @@
-MITOGEN_VERSION=0.3.3
-PIP_DEPS='ansible<6' passlib
+MITOGEN_VERSION=0.3.4
+PIP_DEPS='ansible<7' passlib
 PIP_CMD=pip3 -q --disable-pip-version-check
 
 all: deps test
@@ -26,7 +26,7 @@ recreate: destroy up
 reload: down up
 
 deps:
-	${PIP_CMD} install ${PIP_DEPS}
+	${PIP_CMD} install --upgrade ${PIP_DEPS}
 	ansible-galaxy install -r requirements.yml
 	test -d ~/.ansible/mitogen-${MITOGEN_VERSION} || curl -sSL https://github.com/mitogen-hq/mitogen/archive/refs/tags/v${MITOGEN_VERSION}.tar.gz | tar xz -C ~/.ansible
 	ln -sfn mitogen-${MITOGEN_VERSION} ~/.ansible/mitogen-current
