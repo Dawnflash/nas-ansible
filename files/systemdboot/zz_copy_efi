@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cp /vmlinuz /boot/efi/vmlinuz-linux
-cp /initrd.img /boot/efi/initrd-linux
-echo Updated EFI partition with the latest kernel

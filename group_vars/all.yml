@@ -5,7 +5,6 @@ locale: C.UTF-8
 
 manage_network: yes
 manage_containers: yes
-use_systemdboot: yes
 certbot_flags: ""
 
 ntp_servers:

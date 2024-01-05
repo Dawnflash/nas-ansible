@@ -1,4 +1,3 @@
 manage_network: no
 manage_containers: no
-use_systemdboot: no
 certbot_flags: --staging

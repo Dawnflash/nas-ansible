@@ -139,21 +139,3 @@
     src: "{{ item }}"
     dest: "{{ private_dir }}"
   with_fileglob: "templates/private/*"
-
-- name: Install kernel EFI post-install hook
-  copy:
-    src: files/systemdboot/zz_copy_efi
-    dest: /etc/kernel/postinst.d
-    mode: 0755
-  when: use_systemdboot
-  notify:
-    - Run kernel EFI post-install hook
-
-- name: Install initramfs EFI hook
-  file:
-    src: "/etc/kernel/postinst.d/zz_copy_efi"
-    dest: "/etc/initramfs-tools/hooks/zz_copy_efi"
-    state: link
-  when: use_systemdboot
-  notify:
-    - Run kernel EFI post-install hook

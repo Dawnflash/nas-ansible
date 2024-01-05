@@ -40,9 +40,6 @@
     state: restarted
   loop: "{{ systemd_services_reg.results | selectattr('changed', 'equalto', True) | map(attribute='item') }}"
 
-- name: Run kernel EFI post-install hook
-  shell: /etc/kernel/postinst.d/zz_copy_efi "$(uname -r)"
-
 - name: Reload chrony sources
   command: chronyc reload sources
 
