@@ -22,44 +22,44 @@
     - Reload chrony sources
 
 - block:
-  - name: Check legacy network conf
-    stat:
-      path: "{{ legacy_conf_path }}"
-    register: legacy_conf
+    - name: Check legacy network conf
+      stat:
+        path: "{{ legacy_conf_path }}"
+      register: legacy_conf
 
-  - name: Backup legacy network conf
-    copy:
-      src: "{{ legacy_conf_path }}"
-      dest: "{{ legacy_conf_path }}.bak"
-      remote_src: yes
-      mode: preserve
-    when: legacy_conf.stat.exists
+    - name: Backup legacy network conf
+      copy:
+        src: "{{ legacy_conf_path }}"
+        dest: "{{ legacy_conf_path }}.bak"
+        remote_src: yes
+        mode: preserve
+      when: legacy_conf.stat.exists
 
-  - name: Remove legacy network conf
-    file:
-      path: "{{ legacy_conf_path }}"
-      state: absent
+    - name: Remove legacy network conf
+      file:
+        path: "{{ legacy_conf_path }}"
+        state: absent
 
-  - name: Install netplan conf
-    template:
-      src: network/{{ network.netplan }}
-      dest: /etc/netplan
-    register: netplan_conf
+    - name: Install netplan conf
+      template:
+        src: network/{{ network.netplan }}
+        dest: /etc/netplan
+      register: netplan_conf
 
-  - name: Configure resolv.conf
-    template:
-      src: network/resolv.conf
-      dest: /etc
+    - name: Configure resolv.conf
+      template:
+        src: network/resolv.conf
+        dest: /etc
 
-  - name: Enable networkd
-    systemd:
-      name: systemd-networkd
-      enabled: yes
-      state: started
+    - name: Enable networkd
+      systemd:
+        name: systemd-networkd
+        enabled: yes
+        state: started
 
-  - name: Apply netplan
-    command: netplan apply
-    when: netplan_conf.changed
+    - name: Apply netplan
+      command: netplan apply
+      when: netplan_conf.changed
 
   when: manage_network
   vars:
@@ -103,28 +103,28 @@
     dest: "{{ unprivileged_user_reg.home }}/.ssh"
 
 - block:
-  - name: Check root SSH keypair
-    stat:
-      path: "{{ priv_key }}"
-    register: root_priv_key_reg
+    - name: Check root SSH keypair
+      stat:
+        path: "{{ priv_key }}"
+      register: root_priv_key_reg
 
-  - name: Generate root SSH keypair
-    command: ssh-keygen -t {{ ssh.root_key.algo }} -f {{ priv_key }} -N ""
-    when: not root_priv_key_reg.stat.exists
+    - name: Generate root SSH keypair
+      command: ssh-keygen -t {{ ssh.root_key.algo }} -f {{ priv_key }} -N ""
+      when: not root_priv_key_reg.stat.exists
 
-  - name: Register root SSH pubkey
-    command: cat {{ priv_key }}.pub
-    changed_when: false
-    when: not root_priv_key_reg.stat.exists
-    register: root_pub_key
+    - name: Register root SSH pubkey
+      command: cat {{ priv_key }}.pub
+      changed_when: false
+      when: not root_priv_key_reg.stat.exists
+      register: root_pub_key
 
-  - name: Output root SSH pubkey
-    debug:
-      msg:
-        - New SSH keypair was generated. Install it where applicable.
-        - IPv4 proxy SSL sync will not work until you install it there.
-        - "{{ root_pub_key.stdout }}"
-    when: '"stdout" in root_pub_key'
+    - name: Output root SSH pubkey
+      debug:
+        msg:
+          - New SSH keypair was generated. Install it where applicable.
+          - IPv4 proxy SSL sync will not work until you install it there.
+          - "{{ root_pub_key.stdout }}"
+      when: '"stdout" in root_pub_key'
 
   vars:
     priv_key: /root/.ssh/id_{{ ssh.root_key.algo }}

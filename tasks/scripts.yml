@@ -1,15 +1,15 @@
 - block:
-  - name: Test for Oh My ZSH installation
-    stat:
-      path: /root/.oh-my-zsh
-    register: stat_result
+    - name: Test for Oh My ZSH installation
+      stat:
+        path: /root/.oh-my-zsh
+      register: stat_result
 
-  - name: Install Oh My ZSH for root
-    shell: |
-      curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
-    args:
-      warn: false
-    when: not stat_result.stat.exists
+    - name: Install Oh My ZSH for root
+      shell: |
+        curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
+      args:
+        warn: false
+      when: not stat_result.stat.exists
 
 - name: Configure root ZSH
   copy:

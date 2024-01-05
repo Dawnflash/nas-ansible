@@ -1,4 +1,3 @@
-
 - name: Configure Docker
   template:
     src: docker/daemon.json
@@ -11,10 +10,6 @@
     name: docker
     enabled: yes
     state: started
-
-- name: Install Docker-compose
-  pip:
-    name: docker-compose
 
 - name: Create compose stack directories
   file:
