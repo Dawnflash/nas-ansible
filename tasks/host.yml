@@ -44,6 +44,7 @@
       template:
         src: network/{{ network.netplan }}
         dest: /etc/netplan
+        mode: 600
       register: netplan_conf
 
     - name: Configure resolv.conf
