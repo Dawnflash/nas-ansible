@@ -29,6 +29,8 @@ services:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.{{ hostname }}
     ports:
       - 127.0.0.1:8096:8096
+    networks:
+      media:
   qbittorrent:
     image: linuxserver/qbittorrent
     container_name: qbittorrent
@@ -259,11 +261,13 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/syncthing:/config"
       - /Master/Random/Sync:/sync
-    ports:
-      - 127.0.0.1:8384:8384
-      - 22000:22000/tcp
-      - 22000:22000/udp
-      - 21027:21027/udp
+    network_mode: host # for LAN discovery
+    entrypoint:
+      [
+        "/bin/sh",
+        "-c",
+        "sed -i 's/0\\.0\\.0\\.0/127.0.0.1/' /etc/s6-overlay/s6-rc.d/svc-syncthing/run; exec /init",
+      ]
 
 networks:
   media:
