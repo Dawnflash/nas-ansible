@@ -56,12 +56,13 @@ check_ipv4() {
   NEW_ADDR=$(dig +short txt ch whoami.cloudflare @1.1.1.1 | tr -d \")
   ZID=$(cf_request GET "zones?name=$CF_ZONE" | jq -r '.result[0].id')
   CHANGE=0
-  cf_request GET "zones/$ZID/dns_records?type=A" | jq -r --arg host $HOSTNAME '.result[] | select(.name | endswith($host)) | .id' | while read RID; do
+  cf_request GET "zones/$ZID/dns_records?type=A" | jq -r --arg host $HOSTNAME '.result[] | select(.name | endswith($host)) | .id' > /tmp/rids
+  while read RID; do
     OLD_ADDR=$(cf_request GET "zones/$ZID/dns_records/$RID" | jq -r .result.content)
     [ $OLD_ADDR = $NEW_ADDR ] && continue
     CHANGE=1
     cf_request PATCH "zones/$ZID/dns_records/$RID" "{\"content\":\"$NEW_ADDR\"}" | jq -r '.result.name + ": " + (.success | tostring)'
-  done
+  done < /tmp/rids
   [ $CHANGE -eq 1 ] && tg_notify
 }
 
