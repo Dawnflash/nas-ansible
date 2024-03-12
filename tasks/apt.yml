@@ -10,7 +10,7 @@
 
 - name: Install packages
   apt:
-    update_cache: yes
+    update_cache: true
     name:
       - zfsutils-linux
       - btrfs-progs
@@ -50,7 +50,7 @@
 
 - name: Install packages without recommendations
   apt:
-    install_recommends: no
+    install_recommends: false
     name:
       - prometheus
 
@@ -59,7 +59,7 @@
       get_url:
         url: "{{ item.value.gpg }}"
         dest: /etc/apt/{{ item.key }}.armor.gpg
-        force: yes
+        force: true
       loop: "{{ apt_gpg_keys.armor | dict2items }}"
       register: apt_gpg_keys_armor_reg
 
@@ -72,7 +72,7 @@
       get_url:
         url: "{{ item.value.gpg }}"
         dest: "{{ trusted_gpg_d }}/{{ item.key }}.gpg"
-        force: yes
+        force: true
       loop: "{{ apt_gpg_keys.binary | dict2items }}"
 
     - name: Add signed repositories
@@ -86,7 +86,7 @@
 
 - name: Install additional packages
   apt:
-    update_cache: yes
+    update_cache: true
     name:
       - docker-ce
       - netdata

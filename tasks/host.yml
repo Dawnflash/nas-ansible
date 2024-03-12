@@ -31,7 +31,7 @@
       copy:
         src: "{{ legacy_conf_path }}"
         dest: "{{ legacy_conf_path }}.bak"
-        remote_src: yes
+        remote_src: true
         mode: preserve
       when: legacy_conf.stat.exists
 
@@ -55,7 +55,7 @@
     - name: Enable networkd
       systemd:
         name: systemd-networkd
-        enabled: yes
+        enabled: true
         state: started
 
     - name: Apply netplan

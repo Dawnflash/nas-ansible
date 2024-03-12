@@ -1,0 +1,30 @@
+- name: Configure postfix
+  template:
+    src: "{{ item }}"
+    dest: /etc/postfix
+  with_fileglob: "templates/postfix/*"
+  notify:
+    - Restart postfix
+
+- name: Ensure postfix runs
+  systemd:
+    name: postfix
+    enabled: true
+    state: started
+
+- name: Configure wireguard
+  template:
+    src: templates/wireguard/config.j2
+    dest: /etc/wireguard/{{ item.key }}.conf
+  loop: "{{ network.wireguard | dict2items }}"
+  vars:
+    wireguard: "{{ item.value }}"
+  notify:
+    - Restart wireguard
+
+- name: Ensure wireguard runs
+  systemd:
+    name: wg-quick@{{ item }}
+    enabled: true
+    state: started
+  loop: "{{ network.wireguard | list }}"

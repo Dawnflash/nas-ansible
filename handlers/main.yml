@@ -1,6 +1,6 @@
 - name: Reload systemd
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Reload nginx
   systemd:
@@ -33,10 +33,16 @@
     state: restarted
   listen: Changed /etc/defaults
 
+- name: Restart wireguard
+  systemd:
+    name: wg-quick@{{ item }}
+    state: restarted
+  loop: "{{ network.wireguard | list }}"
+
 - name: Restart custom systemd services
   systemd:
     name: "{{ item | basename }}"
-    enabled: yes
+    enabled: true
     state: restarted
   loop: "{{ systemd_services_reg.results | selectattr('changed', 'equalto', True) | map(attribute='item') }}"
 

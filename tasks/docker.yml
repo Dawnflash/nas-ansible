@@ -8,7 +8,7 @@
 - name: Start Docker
   systemd:
     name: docker
-    enabled: yes
+    enabled: true
     state: started
 
 - name: Create compose stack directories

@@ -1,3 +1,3 @@
-manage_network: no
-manage_containers: no
+manage_network: false
+manage_containers: false
 certbot_flags: --staging
