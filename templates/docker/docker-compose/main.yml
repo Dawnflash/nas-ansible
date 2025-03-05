@@ -153,6 +153,16 @@ services:
       - 127.0.0.1:9696:9696
     networks:
       media:
+  flaresolverr:
+    image: ghcr.io/flamesolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=info
+    ports:
+      - 127.0.0.1:8191:8191
+    networks:
+      media:
   # pihole:
   #   container_name: pihole
   #   image: pihole/pihole:latest
