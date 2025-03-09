@@ -22,7 +22,7 @@ network:
     - 1.1.1.1
     - 2606:4700:4700::1111
     - 2606:4700:4700::1001
-  uplink: enp7s0
+  uplink: enp8s0
   netplan: uplink.yaml
   wireguard:
     wg0:
