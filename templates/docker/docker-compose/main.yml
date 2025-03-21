@@ -154,7 +154,7 @@ services:
     networks:
       media:
   flaresolverr:
-    image: ghcr.io/flamesolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
     restart: unless-stopped
     environment:

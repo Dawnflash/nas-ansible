@@ -125,6 +125,12 @@ nginx:
       port: 32400
     jellyfin:
       port: 8096
+      locations:
+        - path: /socket
+          http: 1.1
+          headers:
+            Upgrade: $http_upgrade
+            Connection: "upgrade"
     tautulli:
       port: 8181
     ombi:
