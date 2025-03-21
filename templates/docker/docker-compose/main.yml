@@ -221,8 +221,6 @@ services:
     environment:
       - TZ={{ timezone }}
       - IP_HEADER=X-Real-IP
-      - WEBSOCKET_ENABLED=true
-      - WEBSOCKET_PORT=12005
       - LOG_FILE=/data/bitwarden.log
       - LOG_LEVEL=warn
       - SIGNUPS_ALLOWED=true

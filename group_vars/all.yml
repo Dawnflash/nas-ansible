@@ -125,12 +125,6 @@ nginx:
       port: 32400
     jellyfin:
       port: 8096
-      locations:
-        - path: /socket
-          http: 1.1
-          headers:
-            Upgrade: $http_upgrade
-            Connection: "upgrade"
     tautulli:
       port: 8181
     ombi:
@@ -139,36 +133,12 @@ nginx:
       port: 6767
     radarr:
       port: 7878
-      locations:
-        - path: /signalr
-          http: 1.1
-          headers:
-            Upgrade: $http_upgrade
-            Connection: $http_connnection
     lidarr:
       port: 8686
-      locations:
-        - path: /signalr
-          http: 1.1
-          headers:
-            Upgrade: $http_upgrade
-            Connection: $http_connnection
     prowlarr:
       port: 9696
-      locations:
-        - path: /signalr
-          http: 1.1
-          headers:
-            Upgrade: $http_upgrade
-            Connection: $http_connnection
     readarr:
       port: 8787
-      locations:
-        - path: /signalr
-          http: 1.1
-          headers:
-            Upgrade: $http_upgrade
-            Connection: $http_connnection
     sonarr:
       port: 8989
     qbittorrent:
@@ -186,13 +156,6 @@ nginx:
       basic_auth: common
     bitwarden:
       port: 12004
-      locations:
-        - path: /notifications/hub/negotiate
-        - path: /notifications/hub
-          port: 12005
-          headers:
-            Upgrade: $http_upgrade
-            Connection: '"upgrade"'
       extra:
         client_max_body_size: 128M
     syncthing:
