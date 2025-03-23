@@ -77,6 +77,7 @@ ssh:
     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM5692OdhpKwg1NfL2eU34F/F5fTs80L3R8Jh+3ibU6S dawnmeow@nas
     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMGPWHaD9juzifk6TRW648maJSBZTUZur+5Y5lwSJxlD adam@luna
     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMyH0XS5sGe4TpqFvlBW0xqtvVTtwdyi2kThcCbaUXFz adam@op7p
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpYgq5u3+JV/lBCtWXU2+MSl0S1CDrHVDBUwy3rYHH8 hana@arch
   root_key:
     algo: ed25519
 
