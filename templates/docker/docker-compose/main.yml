@@ -43,6 +43,7 @@ services:
     volumes:
       - "{{ ssd_storage.root }}/qbittorrent:/config"
       - "{{ ssd_storage.root }}/downloads:/downloads"
+      - "/Master/Random/torrent:/hdd"
     network_mode: host # to enable active P2P connections and avoid IPv6 NAT
   tautulli:
     image: tautulli/tautulli
