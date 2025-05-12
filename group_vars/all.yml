@@ -169,8 +169,8 @@ apt_gpg_keys:
       gpg: https://download.docker.com/linux/debian/gpg
       repo: https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     netdata:
-      gpg: https://packagecloud.io/netdata/netdata-edge/gpgkey
-      repo: https://packagecloud.io/netdata/netdata-edge/debian {{ ansible_distribution_release }} main
+      gpg: https://repository.netdata.cloud/netdatabot.gpg.key
+      repo: https://repo.netdata.cloud/repos/stable/debian/ {{ ansible_distribution_release }}/
   binary:
     mkvtoolnix:
       gpg: https://mkvtoolnix.download/gpg-pub-moritzbunkus.gpg
