@@ -1,0 +1,13 @@
+[Unit]
+Description=ThermoBeacon exporter
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory=/root/thermobeacon-exporter
+ExecStart=/root/thermobeacon-exporter/bin/python3 main.py --port 8988
+
+[Install]
+WantedBy=multi-user.target

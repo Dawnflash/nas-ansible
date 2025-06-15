@@ -1,19 +1,19 @@
 global:
-  scrape_interval: {{ prometheus.frequency }}
-  evaluation_interval: {{ prometheus.frequency }}
+  scrape_interval: { { prometheus.frequency } }
+  evaluation_interval: { { prometheus.frequency } }
   # scrape_timeout: 10s
 
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-      # monitor: 'example'
+    # monitor: 'example'
 
 # Alertmanager configuration
 alerting:
   alertmanagers:
-  - static_configs:
-    # Uncomment when Alertmanager is installed (apt: prometheus-alertmanager)
-    # - targets: [localhost:9093]
+    - static_configs:
+      # Uncomment when Alertmanager is installed (apt: prometheus-alertmanager)
+      # - targets: [localhost:9093]
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
@@ -35,3 +35,8 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets: [localhost:19999]
+
+  # ThermoBeacon exporter
+  - job_name: thermobeacon
+    static_configs:
+      - targets: [localhost:8988]
