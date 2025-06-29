@@ -138,8 +138,6 @@ nginx:
       port: 8686
     prowlarr:
       port: 9696
-    readarr:
-      port: 8787
     sonarr:
       port: 8989
     qbittorrent:

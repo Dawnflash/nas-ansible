@@ -124,22 +124,6 @@ services:
       - 127.0.0.1:8686:8686
     networks:
       media:
-  readarr:
-    image: linuxserver/readarr:nightly
-    container_name: readarr
-    restart: unless-stopped
-    environment:
-      - PUID={{ unprivileged_user_reg.uid }}
-      - PGID={{ unprivileged_user_reg.group }}
-      - TZ={{ timezone }}
-    volumes:
-      - "{{ ssd_storage.root }}/readarr:/config"
-      - "{{ ssd_storage.root }}/downloads:/downloads"
-      - /Master/Media/Books:/books
-    ports:
-      - 127.0.0.1:8787:8787
-    networks:
-      media:
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
