@@ -1,6 +1,6 @@
 global:
-  scrape_interval: { { prometheus.frequency } }
-  evaluation_interval: { { prometheus.frequency } }
+  scrape_interval: "{{ prometheus.frequency }}"
+  evaluation_interval: "{{ prometheus.frequency }}"
   # scrape_timeout: 10s
 
   # Attach these labels to any time series or alerts when communicating with
