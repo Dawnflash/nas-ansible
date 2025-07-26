@@ -44,8 +44,15 @@
       template:
         src: network/{{ network.netplan }}
         dest: /etc/netplan
-        mode: 600
+        mode: 0600
       register: netplan_conf
+
+    - name: Install networkd-dispatcher scripts
+      template:
+        src: "{{ item }}"
+        dest: /etc/networkd-dispatcher/routable.d/
+        mode: 0755
+      with_fileglob: "templates/network/networkd-dispatcher/routable.d/*"
 
     - name: Configure resolv.conf
       template:

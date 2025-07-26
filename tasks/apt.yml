@@ -47,6 +47,8 @@
       - dnsutils
       - ncdu
       - systemd-boot # the bootloader
+      - yq
+      - networkd-dispatcher # post-up scripts for netplan
 
 - name: Install packages without recommendations
   apt:

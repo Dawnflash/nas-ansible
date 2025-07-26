@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ "$IFACE" = "{{ network.uplink }}" ]; then
+  # Advertise NBASE-T speeds
+  ethtool -s $IFACE advertise 0x1800000001028
+fi
