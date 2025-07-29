@@ -15,4 +15,7 @@ alias ip="ip -c"
 alias hddlist='printf "/dev/%s\n" $(lsblk -J -o name,rota | jq -r ".blockdevices[] | select(.rota).name")'
 alias hddstate='hdparm -C $(hddlist)'
 alias hddstop='hdparm -y $(hddlist)'
-alias diskid=$'lsblk -JO | jq -r \'.blockdevices[] | .name + " = " + .model + ":" + .serial + " (WWN: " + .wwn + ")"\''
+
+diskid() {
+  lsblk -JO | jq -r '.blockdevices[] | (if .hctl then (.hctl | split(":")[0] | tonumber | . + 1) else "-" end) as $bay | "\(.name) = \(.serial):\(.model) (WWN \(.wwn)) (BAY \($bay))"'
+}
