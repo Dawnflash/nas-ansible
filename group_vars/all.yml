@@ -181,6 +181,7 @@ netdata:
 
 prometheus:
   frequency: 10s
+  retention_time: 730d # 2 years
   storage_path: "{{ ssd_storage.root }}/prometheus/metrics2"
 
 email:
