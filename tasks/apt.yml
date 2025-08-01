@@ -28,7 +28,6 @@
       - htop
       - strace
       - zstd
-      - wireguard
       - pv
       - tshark
       - netplan.io
