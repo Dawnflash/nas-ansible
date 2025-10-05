@@ -1,0 +1,5 @@
+[Match]
+PermanentMACAddress=a8:a1:59:c1:2f:fb
+
+[Link]
+Name=eth0

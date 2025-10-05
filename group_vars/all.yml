@@ -22,7 +22,7 @@ network:
     - 1.1.1.1
     - 2606:4700:4700::1111
     - 2606:4700:4700::1001
-  uplink: enp35s0
+  uplink: eth0
   netplan: uplink.yaml
 
 zpool_name: Master

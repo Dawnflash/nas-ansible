@@ -52,3 +52,9 @@
   notify:
     - Reload systemd
     - Restart custom systemd services
+
+- name: Install network links
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/network
+  with_fileglob: "templates/systemd/network/*.link"
