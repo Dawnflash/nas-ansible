@@ -1,2 +1,6 @@
 .vagrant
 vault-password
+pyvenv.cfg
+CACHEDIR.TAG
+bin/
+lib/
