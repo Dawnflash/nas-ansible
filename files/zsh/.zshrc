@@ -2,6 +2,7 @@ export ZSH="/root/.oh-my-zsh"
 export EDITOR=vim
 export VISUAL=vim
 export PATH=$PATH:/root/bin
+export DOCKER_API_VERSION=1.52
 
 ZSH_THEME="robbyrussell"
 plugins=(git)

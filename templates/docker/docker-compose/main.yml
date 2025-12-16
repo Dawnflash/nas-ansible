@@ -184,20 +184,20 @@ services:
       - 127.0.0.1:6789:6789
     networks:
       media:
-  ombi:
-    image: linuxserver/ombi
-    container_name: ombi
-    restart: unless-stopped
-    environment:
-      - PUID={{ unprivileged_user_reg.uid }}
-      - PGID={{ unprivileged_user_reg.group }}
-      - TZ={{ timezone }}
-    volumes:
-      - "{{ ssd_storage.root }}/ombi:/config"
-    ports:
-      - 127.0.0.1:3579:3579
-    networks:
-      media:
+  # ombi:
+  #   image: linuxserver/ombi
+  #   container_name: ombi
+  #   restart: unless-stopped
+  #   environment:
+  #     - PUID={{ unprivileged_user_reg.uid }}
+  #     - PGID={{ unprivileged_user_reg.group }}
+  #     - TZ={{ timezone }}
+  #   volumes:
+  #     - "{{ ssd_storage.root }}/ombi:/config"
+  #   ports:
+  #     - 127.0.0.1:3579:3579
+  #   networks:
+  #     media:
   vaultwarden:
     image: vaultwarden/server:latest
     container_name: vaultwarden
@@ -256,11 +256,21 @@ services:
       - /Master/Random/Sync:/sync
     network_mode: host # for LAN discovery
     entrypoint:
-      [
-        "/bin/sh",
-        "-c",
-        "sed -i 's/0\\.0\\.0\\.0/127.0.0.1/' /etc/s6-overlay/s6-rc.d/svc-syncthing/run; exec /init",
-      ]
+      ["/bin/sh", "-c", "sed -i 's/0\\.0\\.0\\.0/127.0.0.1/' /etc/s6-overlay/s6-rc.d/svc-syncthing/run; exec /init"]
+  trilium:
+    image: triliumnext/trilium:latest
+    container_name: trilium
+    restart: unless-stopped
+    environment:
+      - TRILIUM_DATA_DIR=/home/node/trilium-data
+      - USER_UID={{ unprivileged_user_reg.uid }}
+      - USER_GID={{ unprivileged_user_reg.group }}
+    ports:
+      - "127.0.0.1:8385:8080"
+    volumes:
+      - "{{ ssd_storage.root }}/trilium:/home/node/trilium-data"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
 networks:
   media:

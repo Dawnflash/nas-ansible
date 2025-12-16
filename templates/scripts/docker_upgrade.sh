@@ -2,6 +2,8 @@
 
 set -e
 
+export DOCKER_API_VERSION=1.52
+
 {% for stack in docker.stacks %}
 cd '{{ ssd_storage.root }}/docker/{{ stack }}'
 echo Upgrading stack {{ stack }}

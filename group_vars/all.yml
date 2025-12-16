@@ -98,8 +98,8 @@ nginx:
       port: 8096
     tautulli:
       port: 8181
-    ombi:
-      port: 3579
+    # ombi:
+    #   port: 3579
     bazarr:
       port: 6767
     radarr:
@@ -130,6 +130,8 @@ nginx:
     syncthing:
       port: 8384
       basic_auth: common
+    trilium:
+      port: 8385
 
 apt_gpg_keys:
   armor:
