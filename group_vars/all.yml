@@ -134,6 +134,10 @@ nginx:
       port: 8385
     immich:
       port: 2283
+      extra:
+        client_max_body_size: 50000M
+        proxy_request_buffering: off
+        client_body_buffer_size: 1M
 
 apt_gpg_keys:
   armor:
