@@ -184,6 +184,20 @@ services:
       - 127.0.0.1:6789:6789
     networks:
       media:
+  komga:
+    image: gotson/komga:latest
+    container_name: komga
+    restart: unless-stopped
+    user: "{{ unprivileged_user_reg.uid }}:{{ unprivileged_user_reg.group }}"
+    volumes:
+      - "{{ ssd_storage.root }}/komga:/config"
+      - /Master/Media/Books:/data
+    ports:
+      - 127.0.0.1:25600:25600
+    environment:
+      - TZ={{ timezone }}
+    networks:
+      media:
   # ombi:
   #   image: linuxserver/ombi
   #   container_name: ombi

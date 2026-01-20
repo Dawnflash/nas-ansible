@@ -36,6 +36,7 @@ ssd_storage:
     - bitwarden
     - grafana
     - jellyfin
+    - komga
 
 docker:
   ipv6_cidr: "2001:db8:1::/64"
@@ -136,8 +137,10 @@ nginx:
       port: 2283
       extra:
         client_max_body_size: 50000M
-        proxy_request_buffering: off
+        proxy_request_buffering: "off"
         client_body_buffer_size: 1M
+    komga:
+      port: 25600
 
 apt_gpg_keys:
   armor:
