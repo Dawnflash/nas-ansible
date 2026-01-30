@@ -289,7 +289,7 @@ services:
   # See https://docs.immich.app/install/docker-compose for immich stuff
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:v2.4.1
+    image: ghcr.io/immich-app/immich-server:v2.5.2
     volumes:
       - /Master/Media/Immich/data:/data
       - /etc/localtime:/etc/localtime:ro
@@ -310,7 +310,7 @@ services:
       disable: false
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:v2.4.1
+    image: ghcr.io/immich-app/immich-machine-learning:v2.5.2
     volumes:
       - immich-model-cache:/cache
     environment:
