@@ -1,0 +1,344 @@
+#trashGuideUrl: https://github.com/BlackDark/fork-TRASH-Guides
+#recyclarrConfigUrl: https://github.com/BlackDark/fork-recyclarr-configs
+localCustomFormatsPath: /app/cfs
+localConfigTemplatesPath: /app/templates
+telemetry: false
+
+sonarrEnabled: true
+radarrEnabled: true
+lidarrEnabled: false
+
+customFormatDefinitions:
+  - trash_id: aither-internals
+    trash_scores:
+      default: 500
+    trash_description: "Aither internals"
+    name: "Aither internals"
+    includeCustomFormatWhenRenaming: false
+    specifications:
+      - name: ARTiCUN0
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(ARTiCUN0)$"
+      - name: ATELiER
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(ATELiER)$"
+      - name: Kitsune
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(Kitsune)$"
+      - name: MainFrame
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(MainFrame)$"
+      - name: NAN0
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(NAN0)$"
+      - name: WiTCHCRAFT
+        implementation: ReleaseGroupSpecification
+        negate: false
+        required: false
+        fields:
+          value: "^(WiTCHCRAFT)$"
+
+sonarr:
+  instance1:
+    base_url: http://sonarr:8989
+    api_key: !secret SONARR_API_KEY
+
+    enabled: true
+
+    delete_unmanaged_custom_formats:
+      enabled: true
+      ignore: []
+
+    delete_unmanaged_quality_profiles:
+      enabled: true
+      ignore: []
+
+    quality_definition:
+      type: series # anime
+
+    include:
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/anime-remux-1080p.json
+      - template: 20e0fc959f1f1704bed501f23bdae76f
+        source: TRASH
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-2160p-alternative.json
+      - template: dfa5eaae7894077ad6449169b6eb03e0
+        source: TRASH
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p-alternative.json
+      - template: 9d142234e45d6143785ac55f5a9e8dc9
+        source: TRASH
+    #   #### Custom
+    #   - template: sonarr-cf
+    #   - template: sonarr-quality
+
+    custom_formats:
+      - trash_ids:
+          - aither-internals
+        assign_scores_to:
+          - name: Anime 1080p
+            score: 500
+          - name: FullHD+
+            score: 2000
+          - name: HD-1080p
+            score: 2000
+      # allow HD x265 releases
+      - trash_ids:
+          - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+          - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
+        assign_scores_to:
+          - name: HD-1080p
+            score: 0
+          - name: FullHD+
+            score: 0
+
+    quality_profiles:
+      - name: Anime 1080p
+        reset_unmatched_scores:
+          enabled: true # enable to reset scores
+        upgrade:
+          allowed: true # enable to allow updates
+          until_quality: Bluray-1080p # update until quality
+          until_score: 1000 # Upgrade until score
+          min_format_score: 5 # Minimum increment for upgrade
+        min_format_score: 0 # Minimum custom format needed to download
+        quality_sort: top # enable to allow updates
+        qualities: # qualtities enabled in the profile. Can be groups.
+          - name: Bluray-1080p
+            qualities:
+              - Bluray-1080p Remux
+              - Bluray-1080p
+          - name: WEB 1080p
+            qualities:
+              - WEBDL-1080p
+              - WEBRip-1080p
+          - name: HDTV-1080p
+          - name: Bluray-720p
+          - name: WEB 720p
+            qualities:
+              - WEBDL-720p
+              - WEBRip-720p
+          - name: HDTV-720p
+
+    renameQualityProfiles:
+      - from: "[Anime] Remux-1080p"
+        to: Anime 1080p
+      - from: "WEB-1080p (Alternative)"
+        to: HD-1080p
+      - from: "WEB-2160p (Alternative)"
+        to: FullHD+
+
+    # Ability to clone profiles
+    # cloneQualityProfiles:
+    #   - from: RenamedExampleProfile
+    #     to: ClonedProfile
+
+    # custom_format_groups:
+    #   - trash_guide:
+    #       - id: 158188097a58d7687dee647e04af0da3
+    #       - id: e3f37512790f00d0e89e54fe5e790d1c
+    #         #include_unrequired: true # if you want to load all set this to true
+    #     assign_scores_to:
+    #       - name: HD-1080p
+    #         score: 0
+    #       - name: FullHD+
+    #         score: 0
+    # (experimental) Manage download clients
+    # download_clients:
+    #   data:
+    #     - name: "qBit 4K"
+    #       type: qbittorrent
+    #       enable: false
+    #       priority: 1
+    #       remove_completed_downloads: true
+    #       remove_failed_downloads: true
+    #       tags:
+    #         - "4K"
+    #         - "Anime"
+    #       fields:
+    #         host: qbittorrent
+    #         port: 8080
+    #         use_ssl: false
+    #         url_base: /
+    #         username: sonarr
+    #         password: changeme
+    #         tv_category: my-cat
+    #         tv_imported_category: import-cat
+    #   update_password: false
+    #   delete_unmanaged:
+    #     enabled: false
+    #     ignore:
+    #       - "Some client name"
+    #   # (since v1.20.0) Remote path mappings for download clients
+    #   remote_paths:
+    #     - host: "transmission"
+    #       remote_path: "/downloads/tv"
+    #       local_path: "/data/media/downloads/tv"
+    #     - host: "qbittorrent"
+    #       remote_path: "/downloads"
+    #       local_path: "/data/downloads"
+
+radarr:
+  instance1:
+    base_url: http://radarr:7878
+    api_key: !secret RADARR_API_KEY
+
+    enabled: true
+
+    delete_unmanaged_custom_formats:
+      enabled: true
+      ignore: []
+
+    delete_unmanaged_quality_profiles:
+      enabled: true
+      ignore: []
+
+    media_naming_api: {}
+
+    media_naming: {}
+
+    quality_definition:
+      type: movie # anime sqp-streaming sqp-uhd
+
+    include:
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/remux-2160p-combined.json
+      - template: d1d310673359205736b4b84acd5ea8c8
+        source: TRASH
+
+    quality_profiles: []
+
+    custom_formats:
+      - trash_ids:
+          - aither-internals
+        assign_scores_to:
+          - name: FullHD+
+            score: 2000
+      # allow HD x265 releases
+      - trash_ids:
+          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+          - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+        assign_scores_to:
+          - name: FullHD+
+            score: 0
+
+    renameQualityProfiles:
+      - from: "Remux 2160p (Combined)"
+        to: FullHD+
+
+    # since v1.14.0. Optional
+    # delay_profiles:
+    #   default:
+    #     enableUsenet: true
+    #     enableTorrent: false
+    #     preferredProtocol: usenet
+    #     usenetDelay: 10
+    #     torrentDelay: 0
+    #     bypassIfHighestQuality: false
+    #     bypassIfAboveCustomFormatScore: false
+    #     minimumCustomFormatScore: 0
+    #   additional:
+    #     - enableUsenet: true
+    #       enableTorrent: false
+    #       preferredProtocol: usenet
+    #       usenetDelay: 10
+    #       torrentDelay: 0
+    #       bypassIfHighestQuality: false
+    #       bypassIfAboveCustomFormatScore: false
+    #       minimumCustomFormatScore: 0
+    #       order: 1
+    #       tags:
+    #         - delayprofiletest
+
+    # experimental
+    # media_management:
+    #   recycleBin: "/tmp"
+
+    # (experimental) Manage download clients
+    # download_clients:
+    #   data:
+    #     - name: "qBit 4K"
+    #       type: qbittorrent
+    #       enable: false
+    #       priority: 1
+    #       remove_completed_downloads: true
+    #       remove_failed_downloads: true
+    #       tags:
+    #         - "4K"
+    #         - "Anime"
+    #       fields:
+    #         host: qbittorrent
+    #         port: 8080
+    #         use_ssl: false
+    #         url_base: /
+    #         username: sonarr
+    #         password: changeme
+    #         movie_imported_category: series-4k
+    #   update_password: false
+    #   delete_unmanaged:
+    #     enabled: false
+    #     ignore:
+    #       - "Some client name"
+    #     # (since v1.20.0) Remote path mappings for download clients
+    #   remote_paths:
+    #     - host: "transmission"
+    #       remote_path: "/downloads/movies"
+    #       local_path: "/downloads/1"
+    #     - host: "qbittorrent"
+    #       remote_path: "/downloads"
+    #       local_path: "/downloads/2"
+    #   # Global download client configuration
+    #   config:
+    #     download_client_working_folders: "/downloads,/tmp"
+    #     enable_completed_download_handling: true
+    #     auto_redownload_failed: false
+    #     auto_redownload_failed_from_interactive_search: false
+    #     check_for_finished_download_interval: 5
+lidarr:
+  instance1:
+    # Set the URL/API Key to your actual instance
+    base_url: http://lidarr:8686
+    api_key: !secret LIDARR_API_KEY
+
+    # not supported
+    # quality_definition:
+    #   type: movie # Quality definition type
+
+    include:
+      # only custom defined templates available
+      - template: lidarr
+
+    custom_formats: [] # Custom format assignments
+
+    quality_profiles:
+      # TODO: language not correctly mapped
+      - name: ExampleProfile
+        upgrade:
+          until_score: 200
+          # Not supported in whisparr
+          #min_format_score: 200
+
+    metadata_profiles:
+      - name: Default
+        primary_types:
+          - Album
+          - EP
+        secondary_types:
+          - Studio
+        release_statuses:
+          - Official
+
+    delete_unmanaged_metadata_profiles:
+      enabled: true

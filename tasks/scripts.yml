@@ -43,6 +43,13 @@
     minute: "0"
     job: /root/bin/bitwarden_backup.sh
 
+- name: Install configarr crontab
+  cron:
+    name: Run configarr
+    hour: "4"
+    minute: "0"
+    job: "cd {{ ssd_storage.root }}/docker/main && docker compose run --rm configarr"
+
 - name: Install systemd services
   template:
     src: "{{ item }}"

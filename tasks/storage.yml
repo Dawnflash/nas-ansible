@@ -42,3 +42,21 @@
     group: "{{ unprivileged_user.group }}"
     state: directory
   loop: "{{ ssd_storage.unprivileged_dirs }}"
+
+- name: Configure configarr directory tree
+  file:
+    path: "{{ ssd_storage.root }}/configarr/{{ item.path }}"
+    owner: "{{ unprivileged_user.name }}"
+    group: "{{ unprivileged_user.group }}"
+    state: directory
+  with_community.general.filetree: "templates/configarr"
+  when: item.state == "directory"
+
+- name: Configure configarr
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ ssd_storage.root }}/configarr/{{ item.path }}"
+  with_community.general.filetree: "templates/configarr"
+  when: item.state == "file"
+  notify:
+    - Run configarr

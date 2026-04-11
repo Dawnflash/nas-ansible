@@ -60,6 +60,20 @@ services:
       - 127.0.0.1:8181:8181
     networks:
       media:
+  configarr:
+    # declarative *arr configuration (scheduled oneshot)
+    image: configarr/configarr
+    container_name: configarr
+    restart: "no" # this is a oneshot
+    environment:
+      - TZ={{ timezone }}
+    volumes:
+      - "{{ ssd_storage.root }}/configarr/config:/app/config"
+      - "{{ ssd_storage.root }}/configarr/repos:/app/repos"
+      - "{{ ssd_storage.root }}/configarr/cfs:/app/cfs"
+      - "{{ ssd_storage.root }}/configarr/templates:/app/templates"
+    networks:
+      media:
   bazarr:
     image: linuxserver/bazarr
     container_name: bazarr

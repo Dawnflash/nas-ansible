@@ -37,6 +37,7 @@ ssd_storage:
     - grafana
     - jellyfin
     - komga
+    - configarr
 
 docker:
   ipv6_cidr: "2001:db8:1::/64"

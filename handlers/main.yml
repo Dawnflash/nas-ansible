@@ -46,3 +46,8 @@
 - name: Upgrade docker stacks
   command: /root/bin/docker_upgrade.sh
   when: manage_containers
+
+- name: Run configarr
+  command: docker compose run --rm configarr
+  args:
+    chdir: "{{ ssd_storage.root }}/docker/main"
