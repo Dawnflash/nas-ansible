@@ -303,7 +303,7 @@ services:
   # See https://docs.immich.app/install/docker-compose for immich stuff
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:v2.7.2
+    image: ghcr.io/immich-app/immich-server:v3.0.1
     volumes:
       - /Master/Media/Immich/data:/data
       - /etc/localtime:/etc/localtime:ro
