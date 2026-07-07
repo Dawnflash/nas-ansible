@@ -1,8 +1,25 @@
+- name: Create root fish config directories
+  file:
+    path: /root/.config/fish/functions
+    state: directory
+
 - name: Configure root fish shell
   copy:
     src: "{{ item }}"
     dest: /root/.config/fish
-  with_fileglob: "files/fish/.*"
+  with_fileglob: "files/fish/*"
+
+- name: Install fisher
+  get_url:
+    url: https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish
+    dest: /root/.config/fish/functions/fisher.fish
+  notify: Update fisher plugins
+
+- name: Configure fisher plugins
+  copy:
+    content: "{{ fisher_plugins | join('\n') }}\n"
+    dest: /root/.config/fish/fish_plugins
+  notify: Update fisher plugins
 
 - name: Create root bin directory
   file:

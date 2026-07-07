@@ -7,6 +7,15 @@ manage_network: true
 manage_containers: true
 certbot_flags: ""
 
+fisher_plugins:
+  - jorgebucaran/fisher # fisher itself
+  - jorgebucaran/autopair.fish # automatically close brackets, quotes, etc.
+  - jorgebucaran/replay.fish # replay shell env in fish
+  - jhillyerd/plugin-git # git aliases
+  - pure-fish/pure # prompt
+  - nickeb96/puffer-fish # useful abbreviations (..., !!, !*)
+  - jethrokuan/z # z directory jumping
+
 ntp_servers:
   - tik.cesnet.cz
   - tak.cesnet.cz

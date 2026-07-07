@@ -51,3 +51,6 @@
   command: docker compose run --rm configarr
   args:
     chdir: "{{ ssd_storage.root }}/docker/main"
+
+- name: Update fisher plugins
+  command: fish -c "fisher update"
