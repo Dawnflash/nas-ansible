@@ -3,11 +3,11 @@
     name: "{{ unprivileged_user.name }}"
     password: "{{ unprivileged_user.password | string | password_hash('sha512', unprivileged_user.salt) }}"
     group: "{{ unprivileged_user.group }}"
-    shell: /bin/zsh
+    shell: /usr/bin/fish
   register: unprivileged_user_reg
 
 - name: Configure root user
   user:
     name: root
     password: "{{ root.password | string | password_hash('sha512', root.salt) }}"
-    shell: /bin/zsh
+    shell: /usr/bin/fish

@@ -48,6 +48,9 @@
       - systemd-boot # the bootloader
       - yq
       - networkd-dispatcher # post-up scripts for netplan
+      - fish # best shell
+      - bat # cat alternative
+      - hx # helix
 
 - name: Install packages without recommendations
   apt:
