@@ -3,6 +3,7 @@ if status is-interactive
 end
 
 alias bat=batcat
+alias l=ll
 # Kot's HDD aliases
 alias hddlist='printf "/dev/%s\n" $(lsblk -J -o name,rota | jq -r ".blockdevices[] | select(.rota).name")'
 alias hddstate='hdparm -C $(hddlist)'
