@@ -143,6 +143,8 @@ nginx:
       basic_auth: common
     trilium:
       port: 8385
+    ntfy:
+      port: 8386
     immich:
       port: 2283
       extra:
