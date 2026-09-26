@@ -3,6 +3,22 @@
   register: ensure_zfs
   changed_when: ensure_zfs.stderr != "no pools available to import"
 
+- name: Create zfs-mount drop-in directory
+  file:
+    path: /etc/systemd/system/zfs-mount.service.d
+    state: directory
+
+# Make sure encrypted datasets are mounted as well.
+- name: Configure zfs-mount to load encryption keys on boot
+  copy:
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/sbin/zfs mount -a -l
+    dest: /etc/systemd/system/zfs-mount.service.d/load-keys.conf
+  notify:
+    - Reload systemd
+
 - name: Validate presence of mounted ZFS datasets
   shell: zfs list -Ho mounted | grep yes
   register: zfs_mount_check
