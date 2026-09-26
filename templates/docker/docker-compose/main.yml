@@ -305,7 +305,7 @@ services:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:v3.1.0
     volumes:
-      - /Master/Media/Immich/data:/data
+      - /Master/Services/Immich:/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       TZ: {{ timezone }}
