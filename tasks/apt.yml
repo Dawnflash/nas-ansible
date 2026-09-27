@@ -29,6 +29,7 @@
       - strace
       - zstd
       - pv
+      - sanoid
       - tshark
       - netplan.io
       - certbot

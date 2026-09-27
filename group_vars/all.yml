@@ -61,6 +61,14 @@ ssh:
   root_key:
     algo: ed25519
 
+offsite_backup:
+  host: 188.122.208.236
+  port: 20001
+  target: pool/nas
+  bwlimit: 1M # bytes per second
+  datasets:
+    - Master/Services/Immich
+
 # ---- bertvv.samba ------
 samba_apple_extensions: true
 # this breaks share root browsing

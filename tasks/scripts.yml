@@ -47,6 +47,14 @@
     minute: "0"
     job: /root/bin/bitwarden_backup.sh
 
+- name: Install off-site backup crontab
+  cron:
+    name: Push backup snapshots to the offsite server
+    hour: "3"
+    minute: "30"
+    # sigh https://unix.stackexchange.com/a/401622
+    job: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /root/bin/offsite_backup.sh
+
 - name: Install configarr crontab
   cron:
     name: Run configarr

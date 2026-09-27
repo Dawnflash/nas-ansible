@@ -20,6 +20,46 @@
   notify:
     - Reload systemd
 
+# Overrides sanoid's systemd service to make it run with local time. UTC would
+# be used without this and the timing would shift with DST changes.
+- block:
+    - name: Create sanoid drop-in directories
+      file:
+        path: /etc/systemd/system/{{ item }}.d
+        state: directory
+      loop: "{{ sanoid_units }}"
+
+    - name: Run sanoid in local time
+      copy:
+        content: |
+          [Service]
+          Environment=TZ={{ timezone }}
+        dest: /etc/systemd/system/{{ item }}.d/timezone.conf
+      loop: "{{ sanoid_units }}"
+      notify:
+        - Reload systemd
+
+  vars:
+    sanoid_units:
+      - sanoid.service
+      - sanoid-prune.service
+
+- name: Create sanoid config directory
+  file:
+    path: /etc/sanoid
+    state: directory
+
+- name: Configure sanoid
+  template:
+    src: sanoid.conf
+    dest: /etc/sanoid/sanoid.conf
+
+- name: Start sanoid
+  systemd:
+    name: sanoid.timer
+    enabled: true
+    state: started
+
 - name: Validate presence of mounted ZFS datasets
   shell: zfs list -Ho mounted | grep yes
   register: zfs_mount_check
