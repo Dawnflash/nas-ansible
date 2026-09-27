@@ -12,8 +12,8 @@ PLAN=/etc/netplan/{{ network.netplan }}
 
 tg_notify () {
   echo Sending TG notification
-  MSG="*\[NAS Networking\]* IP changed: $OLD_ADDR \-\> $NEW_ADDR"
-  telegram-send "$MSG"
+  MSG="<b>[NAS Networking]</b> IP changed: $OLD_ADDR -&gt; $NEW_ADDR"
+  telegram-send -m HTML "$MSG"
 }
 
 cf_update() {
