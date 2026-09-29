@@ -32,4 +32,11 @@ if [ $# -ne 1 ]; then
 fi
 
 MSG="$(echo -ne "$1")"
-curl -s "$TG_BASE/sendMessage" -d "parse_mode=$TG_MODE" -d "chat_id=$TG_CHAT" --data-urlencode "text=$MSG" -d "disable_notification=$TG_SILENT"
+RESP=$(curl -sS "$TG_BASE/sendMessage" -d "parse_mode=$TG_MODE" -d "chat_id=$TG_CHAT" --data-urlencode "text=$MSG" -d "disable_notification=$TG_SILENT")
+
+# Only output the response when something actually goes wrong
+# https://core.telegram.org/bots/api#making-requests
+if ! jq -e .ok <<< "$RESP" > /dev/null 2>&1; then
+  echo "telegram-send failed: $RESP" >&2
+  exit 1
+fi
