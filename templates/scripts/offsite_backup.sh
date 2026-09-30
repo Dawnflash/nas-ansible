@@ -33,9 +33,11 @@ fi
 
 # From `syncoid --help`:
 #   --no-sync-snap     Does not create new snapshot, only transfers existing
-#   --create-bookmark  Creates a zfs bookmark for the newest snapshot on the
-#                      source after replication succeeds (only works with
-#                      --no-sync-snap)
+#   --use-hold         Adds a hold to the newest snapshot on the source and
+#                      target after replication succeeds and removes the hold
+#                      after the next successful replication. The hold name
+#                      includes the identifier if set. This allows for separate
+#                      holds in case of multiple targets.
 #   --no-rollback      Does not rollback snapshots on target (it probably
 #                      requires a readonly target)
 #
@@ -43,13 +45,15 @@ fi
 # --no-sync-snap
 # We want sanoid to create and manage our snapshots, not syncoid.
 #
-# --create-bookmark
+# --use-hold
 # Kinda what it says on the tin. Useful in case baobab is offline for extended
 # periods of time because sanoid on NAS could delete the source snapshot in the
 # meantime and syncoid then wouldn't have anything to reference for the
-# incremental send. With this flag it will always have the bookmark as
-# a reference :3
-# https://openzfs.github.io/openzfs-docs/man/master/8/zfs-bookmark.8.html
+# incremental send. That can't happen with this flag because held snapshots
+# cannot be destroyed so sanoid just emits a warning and tries again later.
+# Also this could theoretically let us do backups on more than one machine
+# if we want to?
+# https://openzfs.github.io/openzfs-docs/man/master/8/zfs-hold.8.html
 #
 # --no-rollback
 # We never want syncoid to do rollback on baobab and its user doesn't have
@@ -64,7 +68,7 @@ fi
 # The network at my mom's place is slow and I don't want to saturate it.
 for DS in $DATASETS; do
   syncoid $QUIET \
-    --no-sync-snap --create-bookmark --no-rollback --no-privilege-elevation \
+    --no-sync-snap --use-hold --no-rollback --no-privilege-elevation \
     --sendoptions=w --compress=none \
     --source-bwlimit={{ offsite_backup.bwlimit }} --sshport=$PORT \
     "$DS" "$TARGET:$TARGET_ROOT/$(basename "$DS")" \
