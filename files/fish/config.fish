@@ -30,5 +30,7 @@ function diskid
     jq -r '
         .blockdevices[]
         | (if .hctl then (.hctl | split(":")[0] | tonumber | . + 1) else "-" end) as $bay
-        | "\(.name) = \(.serial):\(.model) (WWN \(.wwn)) (BAY \($bay))"'
+        | [.name, .serial, .model, .wwn, $bay]
+        | @tsv' | \
+    column -t -s \t
 end
