@@ -26,5 +26,9 @@ set -U pure_show_subsecond_command_duration true
 set -U pure_threshold_command_duration 1
 
 function diskid
-    lsblk -JO | jq -r '.blockdevices[] | (if .hctl then (.hctl | split(":")[0] | tonumber | . + 1) else "-" end) as $bay | "\(.name) = \(.serial):\(.model) (WWN \(.wwn)) (BAY \($bay))"'
+    lsblk -JO | \
+    jq -r '
+        .blockdevices[]
+        | (if .hctl then (.hctl | split(":")[0] | tonumber | . + 1) else "-" end) as $bay
+        | "\(.name) = \(.serial):\(.model) (WWN \(.wwn)) (BAY \($bay))"'
 end
