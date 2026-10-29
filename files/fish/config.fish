@@ -27,11 +27,15 @@ set -U pure_threshold_command_duration 1
 
 function diskid
     lsblk -JO | \
-    jq -r '
-        (["NAME","SERIAL","MODEL","WWN","BAY"] | @tsv),
+    jq -r --slurpfile zstatus (zpool status -j --json-flat-vdevs | psub) '
+        (["NAME","SERIAL","MODEL","WWN","BAY","ZFS"] | @tsv),
         (.blockdevices[]
          | (if .hctl then (.hctl | split(":")[0] | tonumber | . + 1) else "-" end) as $bay
-         | [.name, .serial, .model, .wwn, $bay]
+         | ([$zstatus[0].pools[]?.vdevs] | add) as $zfsdevices
+         | ([."id-link"] + [.children[]?."id-link"]
+            | map($zfsdevices[.]? | .state | select(. != null))
+            | join(" ")) as $zfs
+         | [.name, .serial, .model, .wwn, $bay, $zfs]
          | @tsv)' | \
     column -t -s \t
 end
